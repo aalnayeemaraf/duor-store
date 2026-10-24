@@ -1,0 +1,3898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DUOR | Solid essentials, thoughtfully made</title>
+  <meta name="description" content="DUOR is a clothing brand for solid-colour everyday essentials: shirts, katua, tees and hoodies in relaxed fits.">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Fonts: Host Grotesk for all headings and text, Inter for the menu links, Outfit ExtraBold for the logo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&family=Outfit:wght@800&family=Inter:wght@500&display=swap" rel="stylesheet">
+
+  <!-- Adds the class "js" so scroll animations only run when JavaScript works -->
+  <script>document.documentElement.classList.add('js')</script>
+
+  <!-- 1. LOOK: all CSS lives here -->
+  <style>
+/* =====================================================================
+   DUOR — style.css
+   How this file is organised (search for the number to jump to a part):
+     1. Design tokens      — colours, fonts, spacing. Change the look here.
+     2. Base styles        — reset and basic element styles
+     3. Reusable pieces    — buttons, image boxes, icons, reveal animation
+     4. Announcement bar   — the black strip at the very top
+     5. Header             — the floating navigation pill
+     6. Hero               — the big opening banner
+     7. Trust strip + statement
+     8. Categories
+     9. Shop (filters + product cards)
+    10. Featured product
+    11. Customer care cards + lookbook
+    12. Bulk banner + footer
+    13. Drawers (cart, menu, info), toast, floating buttons
+    14. Responsive rules  — tablet and phone adjustments
+   ===================================================================== */
+
+/* ---------- 1. DESIGN TOKENS ---------- */
+:root {
+  /* Colours */
+  --color-ink: #111111; /* almost-black used for text and dark buttons */
+  --color-text-soft: #555555; /* softer paragraph text */
+  --color-muted: #6B6B6B; /* small grey text */
+  --color-line: #E5E7E3;
+  --color-surface: #F5F7F3;   /* very light sage-grey background */
+  --color-tint: #E9EFE5;   /* light sage tile colour */
+  --color-tint-strong: #D9E3D4;
+  --color-accent: #587559;   /* the one accent colour: a calm sage green */
+  --color-accent-light: #CFDECF;   /* light sage, used on dark areas */
+  --color-sale: #C0332B;
+  /* Fonts */
+  --font-brand: 'Host Grotesk','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;   /* all headings, text and buttons */
+  --font-nav: 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;                 /* menu links only */
+  --font-logo: 'Outfit','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;   /* the DUOR logo only (Outfit Bold) */
+  /* Layout */
+  --page-padding: clamp(16px,3.4vw,44px); /* space left and right of the page */
+  --page-max-width: 1320px;
+  --radius-card: 20px;
+  --space-grid: clamp(16px,2vw,28px);      /* gap between boxes in every grid */
+  --space-card: clamp(22px,2.4vw,30px);   /* padding inside cards */
+  --ease: cubic-bezier(.2,.8,.2,1); /* smooth animation curve */
+}
+
+/* ---------- 2. BASE STYLES ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-brand);
+  color: var(--color-ink);
+  background: #fff;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-x: clip; /* stops sideways scrolling */
+}
+
+img,
+video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+ul {
+  list-style: none;
+}
+
+[hidden] {
+  display: none!important;
+}
+
+/* makes the HTML "hidden" attribute always win */
+/* Long words wrap instead of running off the screen */
+h1,
+h2,
+h3,
+h4,
+p,
+li,
+a,
+span,
+button,
+td,
+th {
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+em {
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+/* <em> is used to colour one word in a heading */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: 10px;
+  top: 10px;
+  z-index: 300;
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 99px;
+}
+
+/* ---------- 3. REUSABLE PIECES ---------- */
+.container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--page-padding);
+  width: 100%;
+}
+
+section {
+  padding: clamp(56px,7vw,104px) 0;
+}
+
+.section-soft {
+  background: linear-gradient(180deg,#fff,var(--color-surface));
+}
+
+/* Section heading row: title on the left, link or filters on the right */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(22px,3vw,40px);
+}
+
+.section-head h2,
+.featured h2,
+.bulk-banner h2,
+.newsletter h2 {
+  font-size: clamp(32px,4.6vw,64px);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 14px;
+}
+
+/* Icons: every <svg class="icon"> uses the sprite at the bottom of index.html */
+.icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+.icon-fill {
+  fill: currentColor;
+  stroke: none;
+  opacity: .13;
+}
+
+/* soft two-tone fill inside icons */
+/* Buttons */
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 28px;
+  max-width: 100%;
+  border-radius: 99px;
+  background: var(--color-ink);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color .35s,transform .3s var(--ease);
+}
+
+.btn::before { /* the dark-grey fill that slides up on hover */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-accent);
+  transform: translateY(101%);
+  border-radius: 50% 50% 0 0/40% 40% 0 0;
+  transition: transform .5s var(--ease),border-radius .5s;
+}
+
+.btn:hover::before {
+  transform: none;
+  border-radius: 0;
+}
+
+.btn .icon {
+  width: 18px;
+  height: 18px;
+  transition: transform .3s var(--ease);
+}
+
+.btn:hover .icon {
+  transform: translateX(4px);
+}
+
+.btn-light {
+  background: #fff;
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+
+.btn-light::before {
+  background: var(--color-ink);
+}
+
+.btn-light:hover {
+  color: #fff;
+  border-color: var(--color-ink);
+}
+
+.btn-white {
+  background: #fff;
+  color: var(--color-ink);
+}
+
+.btn-white::before {
+  background: var(--color-accent-light);
+}
+
+.link-arrow {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--color-ink);
+  padding-bottom: 3px;
+}
+
+.link-arrow .icon {
+  width: 16px;
+  height: 16px;
+  transition: transform .3s var(--ease);
+}
+
+.link-arrow:hover .icon {
+  transform: translateX(5px);
+}
+
+/* Image box: every photo on the site sits in one of these (3:4 shape).
+   The photo fades in over a soft tile that shows the DUOR monogram. */
+.image-box {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  aspect-ratio: 3/4;
+  border-radius: var(--radius-card);
+  background: linear-gradient(160deg,#fff,#EEF2EB);
+  border: 1px solid var(--color-line);
+}
+
+.image-box::before {
+  content: "DUOR";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-logo);
+  font-weight: 800;
+  font-size: clamp(20px,3vw,34px);
+  letter-spacing: .3em;
+  text-indent: .3em;
+  color: rgba(0,0,0,.1);
+}
+
+.image-box.is-loaded::before {
+  display: none;
+}
+
+.image-box img,
+.image-box video {
+  position: absolute;
+  inset: 0;
+}
+
+.image-box img {
+  opacity: 0;
+  transition: opacity .7s,transform 1.1s var(--ease);
+}
+
+.image-box img.is-loaded {
+  opacity: 1;
+}
+
+.image-box-free {
+  aspect-ratio: auto;
+}
+
+/* used by the wide hero image */
+/* Scroll reveal: elements with .reveal fade up when they come into view */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .85s var(--ease),transform .85s var(--ease);
+  transition-delay: calc(var(--delay,0)*90ms);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg,var(--color-accent),var(--color-accent-light));
+  z-index: 200;
+}
+
+/* ---------- 4. ANNOUNCEMENT BAR ---------- */
+/* A slim white bar with one message at a time. Arrows on each side change the message. */
+.announcement-bar {
+  background: #fff;
+  color: var(--color-ink);
+  border-bottom: 1px solid var(--color-line);
+  font-size: 14px;
+  letter-spacing: .06em;
+}
+
+.announcement-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 48px;
+}
+
+.announcement-arrow {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  flex: none;
+  transition: background .25s;
+}
+
+.announcement-arrow:hover {
+  background: var(--color-tint);
+}
+
+.announcement-arrow .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.announcement-arrow:first-child .icon {
+  transform: rotate(180deg);
+}
+
+/* the left arrow is the right arrow turned around */
+.announcement-messages {
+  position: relative;
+  flex: 1;
+  height: 48px;
+  overflow: hidden;
+}
+
+/* Every message waits on the right side, invisible. */
+.announcement-messages a {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 8px;
+  text-align: center;
+  line-height: 1.25;
+  text-wrap: balance;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(28px);
+  transition: opacity .5s var(--ease),transform .5s var(--ease),visibility 0s .5s;
+}
+
+.announcement-messages a.is-before {
+  transform: translateX(-28px);
+}
+
+/* a message that has slid out to the left */
+.announcement-messages a.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.announcement-messages a .icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  transition: transform .3s var(--ease);
+}
+
+.announcement-messages a:hover .icon {
+  transform: translateX(4px);
+}
+
+/* ---------- 5. HEADER ---------- */
+/* Row 1: search (left), logo (centre), account + cart (right).  Row 2: the menu links. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(255,255,255,.96);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--color-line);
+  transition: transform .5s var(--ease);
+}
+
+.site-header.is-hidden {
+  transform: translateY(-100%);
+}
+
+/* slides away while scrolling down */
+.header-top {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+  align-items: center;
+  gap: 16px;
+  height: 88px;
+  transition: height .4s var(--ease);
+}
+
+.site-header.is-compact .header-top {
+  height: 68px;
+}
+
+/* a little shorter once the page has scrolled */
+.header-left,
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-actions {
+  justify-content: flex-end;
+}
+
+.logo {
+  font-family: var(--font-logo);
+  font-weight: 800;
+  font-size: 40px;
+  letter-spacing: .1em;
+  margin-right: -.1em;
+  line-height: 1;
+  transition: font-size .4s var(--ease);
+}
+
+.site-header.is-compact .logo {
+  font-size: 32px;
+}
+
+.icon-button {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: background .25s,color .25s;
+}
+
+.icon-button:hover {
+  background: var(--color-tint);
+}
+
+.header-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 20px 0 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 99px;
+  font-size: 14px;
+  color: var(--color-muted);
+  transition: border-color .25s,color .25s;
+}
+
+.header-search:hover {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.cart-button {
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.cart-button:hover {
+  background: var(--color-accent);
+}
+
+.cart-count {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  display: none;
+  place-items: center;
+  background: var(--color-accent-light);
+  color: var(--color-ink);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 2px solid #fff;
+}
+
+.cart-count.has-items {
+  display: grid;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+/* only shown on phones and tablets */
+.main-nav {
+  border-top: 1px solid var(--color-line);
+  font-family: var(--font-nav);
+}
+
+.nav-row {
+  display: flex;
+  justify-content: center;
+  gap: clamp(8px,2.4vw,40px);
+  height: 52px;
+}
+
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 6px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .01em;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 13px;
+  height: 1.5px;
+  background: var(--color-ink);
+  transform: scaleX(0);
+  transition: transform .35s var(--ease);
+}
+
+.nav-item:hover .nav-link::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.dropdown {
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 8px);
+  min-width: 220px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%,6px);
+  transition: opacity .25s var(--ease),transform .25s var(--ease),visibility 0s .25s;
+}
+
+.nav-item:hover .dropdown,
+.nav-item:focus-within .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%,0);
+  transition-delay: 0s;
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--color-text-soft);
+  transition: background .2s,color .2s;
+}
+
+.dropdown a:hover {
+  background: var(--color-tint);
+  color: var(--color-ink);
+}
+
+/* ---------- 6. HERO ---------- */
+.hero {
+  position: relative;
+  margin: 20px var(--page-padding) 0;
+  min-height: min(78vh,700px);
+  display: flex;
+  align-items: flex-end;
+  border-radius: 32px;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(135deg,#1A1A1A,#3A3A3A);
+  padding: 0;
+}
+
+.hero-media::before {
+  font-size: clamp(80px,20vw,280px);
+  color: rgba(255,255,255,.07);
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.hero::after { /* dark fade so the white text is always readable */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.72) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: clamp(24px,5vw,64px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px 9px 14px;
+  margin-bottom: 22px;
+  border-radius: 99px;
+  background: rgba(255,255,255,.16);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,.28);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.hero-tag .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-accent-light);
+}
+
+.hero-title {
+  font-size: clamp(46px,8vw,124px);
+  line-height: .94;
+  letter-spacing: -.03em;
+  max-width: 9ch;
+}
+
+.hero-title span {
+  display: inline-block;
+  animation: fade-up .9s var(--ease) both;
+  animation-delay: calc(var(--order)*.1s + .15s);
+}
+
+.hero-title em {
+  color: var(--color-accent-light);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+.hero-text {
+  margin: 22px 0 30px;
+  max-width: 380px;
+  font-size: clamp(16px,1.4vw,18px);
+  opacity: .9;
+  animation: fade-up .9s .5s var(--ease) both;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  animation: fade-up .9s .65s var(--ease) both;
+}
+
+.hero .btn-light {
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.4);
+}
+
+.hero .btn-light::before {
+  background: #fff;
+}
+
+.hero .btn-light:hover {
+  color: var(--color-ink);
+}
+
+/* the small glass product card in the bottom-right corner of the hero */
+.hero-feature {
+  width: min(330px,100%);
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.92);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  color: var(--color-ink);
+  animation: fade-up 1s .8s var(--ease) both;
+}
+
+.hero-feature .image-box {
+  width: 78px;
+  flex: none;
+  border-radius: 14px;
+}
+
+.hero-feature .image-box::before {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-indent: .2em;
+}
+
+.hero-feature>div:last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-feature small {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.hero-feature h3 {
+  font-family: var(--font-brand);
+  font-size: 15px;
+  letter-spacing: -.01em;
+  margin: 2px 0;
+}
+
+.hero-feature p {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.hero-feature-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.round-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  transition: .3s var(--ease);
+}
+
+.round-button:hover {
+  background: var(--color-accent);
+  transform: rotate(90deg);
+}
+
+.round-button .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- 7. TRUST STRIP + STATEMENT ---------- */
+.trust-strip {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: var(--space-grid);
+  margin-top: var(--space-grid);
+}
+
+.trust-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+}
+
+.trust-item strong {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.trust-item span.trust-note {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.icon-tile {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--color-tint);
+  display: grid;
+  place-items: center;
+  color: var(--color-ink);
+  flex: none;
+  transition: .4s var(--ease);
+}
+
+.icon-tile .icon {
+  width: 25px;
+  height: 25px;
+}
+
+.trust-item:hover .icon-tile,
+.info-card:hover .icon-tile {
+  background: var(--color-ink);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.statement-text {
+  font-family: var(--font-brand);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  line-height: 1.08;
+  font-size: clamp(30px,5vw,68px);
+  max-width: 20ch;
+  margin-bottom: 28px;
+}
+
+/* ---------- 8. CATEGORIES ---------- */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: var(--space-grid);
+}
+
+.category-card {
+  display: block;
+}
+
+.category-card:hover .image-box img {
+  transform: scale(1.06);
+}
+
+.category-arrow {
+  position: absolute;
+  z-index: 2;
+  right: 12px;
+  bottom: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  transform: scale(.6);
+  opacity: 0;
+  transition: .45s var(--ease);
+}
+
+.category-card:hover .category-arrow {
+  transform: none;
+  opacity: 1;
+}
+
+.category-arrow .icon {
+  transform: rotate(-45deg);
+  width: 20px;
+  height: 20px;
+}
+
+.category-card h3 {
+  margin-top: 14px;
+  font-size: clamp(17px,1.6vw,21px);
+  letter-spacing: -.02em;
+  font-weight: 600;
+}
+
+/* ---------- 9. SHOP: FILTERS + PRODUCT CARDS ---------- */
+.filters {
+  display: flex;
+  gap: 14px 22px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tabs {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 26px;
+  padding: 5px;
+  max-width: 100%;
+}
+
+.tab {
+  position: relative;
+  z-index: 1;
+  padding: 10px 20px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+  transition: color .3s;
+}
+
+.tab.is-active {
+  color: #fff;
+}
+
+.tab:not(.is-active):hover {
+  color: var(--color-ink);
+}
+
+.tab-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 99px;
+  background: var(--color-ink);
+  transition: transform .5s var(--ease),width .5s var(--ease),height .5s var(--ease);
+}
+
+.swatches {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 1px solid rgba(0,0,0,.15);
+  transition: transform .3s var(--ease);
+}
+
+.swatch-all {
+  background: conic-gradient(#5E7FB8,#E7B6C4,#D9CBB4,#4F6B3C,#1E1E1E,#5E7FB8);
+}
+
+.swatch:hover {
+  transform: scale(1.15);
+}
+
+.swatch.is-active {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: clamp(28px,3.2vw,44px) var(--space-grid);
+}
+
+.product-card {
+  animation: fade-in .4s var(--ease) both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.product-card .image-box img+img.is-loaded {
+  opacity: 0;
+}
+
+/* second photo waits... */
+.product-card:hover .image-box img+img.is-loaded {
+  opacity: 1;
+}
+
+/* ...and appears on hover */
+.product-card:hover .image-box img {
+  transform: scale(1.05);
+}
+
+.product-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.badge-row {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: var(--color-ink);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 99px;
+}
+
+.badge+.badge {
+  background: var(--color-tint);
+  color: var(--color-accent);
+}
+
+.wish-button {
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  display: grid;
+  place-items: center;
+  transition: transform .3s var(--ease),background .3s;
+}
+
+.wish-button:hover {
+  transform: scale(1.12);
+}
+
+.wish-button .icon {
+  width: 19px;
+  height: 19px;
+  transition: .3s;
+}
+
+.wish-button.is-saved {
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.wish-button.is-saved .icon {
+  fill: currentColor;
+}
+
+.quick-add {
+  position: absolute;
+  z-index: 3;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  height: 46px;
+  border-radius: 99px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transform: translateY(130%);
+  transition: transform .5s var(--ease),background .3s,color .3s;
+}
+
+.product-card:hover .quick-add,
+.quick-add:focus-visible {
+  transform: none;
+}
+
+.quick-add:hover {
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.quick-add .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.product-info {
+  padding: 12px 2px 0;
+}
+
+.product-info h3 {
+  font-family: var(--font-brand);
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.35;
+}
+
+.product-colour {
+  font-size: 13px;
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 2px;
+}
+
+.product-colour i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--dot);
+  border: 1px solid rgba(0,0,0,.18);
+  flex: none;
+}
+
+.price {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  font-size: 14.5px;
+}
+
+.price strong {
+  font-weight: 600;
+}
+
+.price .is-sale {
+  color: var(--color-sale);
+}
+
+.price s {
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.empty-message {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 50px 0;
+  color: var(--color-muted);
+}
+
+.show-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* ---------- 10. FEATURED PRODUCT ---------- */
+.featured-grid {
+  display: grid;
+  grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr);
+  gap: clamp(28px,6vw,96px);
+  align-items: center;
+}
+
+.featured-grid .image-box {
+  width: min(100%,460px);
+  justify-self: center;
+}
+
+.featured h2 {
+  margin-bottom: 16px;
+}
+
+.featured-text p {
+  color: var(--color-text-soft);
+  font-size: 17px;
+  max-width: 420px;
+  margin-bottom: 20px;
+}
+
+.featured-price {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 18px;
+  margin-bottom: 18px;
+}
+
+.featured-price strong {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.featured-price s {
+  color: var(--color-muted);
+  font-size: 15px;
+}
+
+.featured-colours {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+
+.featured-colours i {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--dot);
+  border: 1px solid rgba(0,0,0,.18);
+}
+
+/* ---------- 11. CUSTOMER CARE CARDS + LOOKBOOK ---------- */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: var(--space-grid);
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: var(--space-card);
+  border-radius: var(--radius-card);
+  background: #fff;
+  border: 1px solid var(--color-line);
+  transition: transform .4s var(--ease),border-color .4s;
+}
+
+.info-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-ink);
+}
+
+.info-card h3 {
+  font-size: 22px;
+  margin: 20px 0 6px;
+  letter-spacing: -.01em;
+}
+
+.info-card p {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.info-card .learn-more {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.info-card .learn-more .icon {
+  width: 16px;
+  height: 16px;
+  transition: transform .3s var(--ease);
+}
+
+.info-card:hover .learn-more .icon {
+  transform: translateX(5px);
+}
+
+/* Lookbook: one big photo and four smaller ones. The big one covers 2 x 2 cells, so it keeps the same 3:4 shape. */
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: var(--space-grid);
+}
+
+.look-card:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+  aspect-ratio: auto;
+}
+
+.look-card:hover img {
+  transform: scale(1.05);
+}
+
+.look-caption {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.94);
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .35s var(--ease),transform .35s var(--ease);
+}
+
+.look-caption .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.look-card:hover .look-caption,
+.look-card:focus-visible .look-caption {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- 12. BULK BANNER + FOOTER ---------- */
+.bulk-banner {
+  margin: 0 var(--page-padding);
+  border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+  color: var(--color-ink);
+  background: var(--color-tint);
+  border: 1px solid var(--color-tint-strong);
+  padding: clamp(36px,6vw,80px);
+}
+
+.bulk-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-grid);
+  flex-wrap: wrap;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
+.bulk-banner h2 {
+  max-width: 14ch;
+}
+
+.bulk-banner p {
+  margin-top: 14px;
+  max-width: 420px;
+  color: var(--color-text-soft);
+}
+
+/* The footer is light, with one dark card for the newsletter. */
+.site-footer {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-line);
+  margin-top: clamp(56px,7vw,104px);
+  padding: clamp(48px,6vw,88px) 0 0;
+  overflow: hidden;
+}
+
+.newsletter {
+  display: grid;
+  grid-template-columns: minmax(0,1.1fr) minmax(0,1fr);
+  gap: var(--space-grid) 48px;
+  align-items: center;
+  padding: clamp(28px,4vw,52px);
+  background: var(--color-ink);
+  color: #fff;
+  border-radius: 28px;
+}
+
+.newsletter h2 em {
+  color: var(--color-accent-light);
+}
+
+.newsletter p {
+  color: #B5B5B5;
+  margin-top: 12px;
+  max-width: 380px;
+}
+
+.newsletter form {
+  display: flex;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 99px;
+  padding: 6px;
+  transition: border-color .3s,background .3s;
+}
+
+.newsletter form:focus-within {
+  border-color: #fff;
+  background: rgba(255,255,255,.14);
+}
+
+.newsletter input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: none;
+  padding: 0 18px;
+  font: inherit;
+  font-size: 16px;
+  color: #fff;
+}
+
+.newsletter input::placeholder {
+  color: #9A9A9A;
+}
+
+.newsletter .btn {
+  height: 46px;
+  padding: 0 24px;
+  flex: none;
+  background: #fff;
+  color: var(--color-ink);
+}
+
+.newsletter .btn::before {
+  background: var(--color-accent-light);
+}
+
+.site-footer .newsletter :focus-visible {
+  outline-color: #fff;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0,1.6fr) repeat(3,minmax(0,1fr));
+  gap: 40px var(--space-grid);
+  padding: clamp(40px,5vw,72px) 0;
+}
+
+.footer-brand .logo {
+  display: inline-block;
+  font-size: 40px;
+}
+
+.footer-about {
+  color: var(--color-muted);
+  font-size: 15px;
+  max-width: 300px;
+  margin: 16px 0 18px;
+}
+
+.footer-contact {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 6px 0;
+  font-size: 14.5px;
+  color: var(--color-text-soft);
+  transition: color .25s;
+}
+
+a.footer-contact:hover {
+  color: var(--color-ink);
+}
+
+.footer-contact .icon {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  color: var(--color-accent);
+}
+
+.social-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.social-links a {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--color-ink);
+  transition: background .3s,color .3s,border-color .3s,transform .3s var(--ease);
+}
+
+.social-links a:hover {
+  background: var(--color-ink);
+  color: #fff;
+  border-color: var(--color-ink);
+  transform: translateY(-3px);
+}
+
+.footer-grid h4 {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 18px;
+}
+
+.footer-links {
+  display: grid;
+  gap: 4px;
+}
+
+.footer-links a,
+.footer-links button {
+  display: block;
+  width: fit-content;
+  padding: 5px 0;
+  text-align: left;
+  font-size: 15px;
+  color: var(--color-ink);
+  background: linear-gradient(var(--color-ink),var(--color-ink)) 0 100%/0 1px no-repeat;
+  transition: background-size .35s var(--ease);
+}
+
+.footer-links a:hover,
+.footer-links button:hover {
+  background-size: 100% 1px;
+}
+
+.footer-wordmark {
+  font-family: var(--font-logo);
+  font-weight: 800;
+  font-size: min(26vw,360px);
+  letter-spacing: .06em;
+  text-indent: .06em;
+  line-height: .8;
+  text-align: center;
+  color: transparent;
+  /* light black that fades out towards the bottom of the letters */
+  background: linear-gradient(180deg,rgba(17,17,17,.2),rgba(17,17,17,0) 88%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  user-select: none;
+  margin-bottom: -.03em;
+}
+
+.footer-bottom {
+  position: relative;
+  border-top: 1px solid var(--color-line);
+  background: var(--color-surface);
+  padding: 22px 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.footer-bottom .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+}
+
+.footer-bottom nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+}
+
+.footer-bottom nav a {
+  transition: color .25s;
+}
+
+.footer-bottom nav a:hover {
+  color: var(--color-ink);
+}
+
+.to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 99px;
+  background: #fff;
+  color: var(--color-ink);
+  font-size: 13px;
+  font-weight: 600;
+  transition: background .3s,color .3s,border-color .3s;
+}
+
+.to-top:hover {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: #fff;
+}
+
+.to-top .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- 13. DRAWERS, TOAST, FLOATING BUTTONS ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0,0,0,.42);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s;
+}
+
+.overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 100;
+  width: min(430px,calc(100% - 20px));
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 28px;
+  border: 1px solid var(--color-line);
+  transform: translateX(112%);
+  visibility: hidden;
+  transition: transform .6s var(--ease),visibility 0s .6s;
+}
+
+.drawer.is-open {
+  transform: none;
+  visibility: visible;
+  transition: transform .6s var(--ease),visibility 0s;
+}
+
+.drawer-wide {
+  width: min(560px,calc(100% - 20px));
+}
+
+.drawer-left {
+  left: 10px;
+  right: auto;
+  transform: translateX(-112%);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  gap: 12px;
+}
+
+.drawer-header h3 {
+  font-size: 26px;
+}
+
+.drawer-close {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--color-tint);
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition: .3s var(--ease);
+}
+
+.drawer-close:hover {
+  transform: rotate(90deg);
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 0 22px 22px;
+}
+
+.drawer-body>.btn {
+  width: 100%;
+}
+
+.drawer-footer {
+  padding: 20px 22px 22px;
+  border-top: 1px solid var(--color-line);
+}
+
+.drawer-footer .btn {
+  width: 100%;
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 17px;
+  margin-bottom: 14px;
+}
+
+.cart-empty {
+  text-align: center;
+  padding: 60px 0 24px;
+  color: var(--color-muted);
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 76px minmax(0,1fr) auto;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 14px;
+  animation: fade-up .5s var(--ease) both;
+}
+
+.cart-item .image-box {
+  width: 76px;
+  border-radius: 12px;
+}
+
+.cart-item .image-box::before {
+  font-size: 9px;
+}
+
+.cart-item h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cart-item p {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.quantity {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-line);
+  border-radius: 99px;
+  margin-top: 8px;
+  background: #fff;
+}
+
+.quantity button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.quantity button:hover {
+  background: var(--color-tint);
+}
+
+.quantity span {
+  min-width: 24px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* phone menu links */
+.menu-link {
+  display: block;
+  padding: 14px 4px;
+  font-family: var(--font-brand);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  font-size: 34px;
+  border-bottom: 1px solid var(--color-line);
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: .5s var(--ease);
+}
+
+.drawer.is-open .menu-link {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--order)*70ms + .25s);
+}
+
+/* info drawer: tabs + content */
+.info-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 22px 14px;
+}
+
+.info-tab {
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1px solid var(--color-line);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+  transition: .3s;
+}
+
+.info-tab.is-active {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: #fff;
+}
+
+.info-tab:not(.is-active):hover {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.info-page {
+  animation: fade-up .45s var(--ease) both;
+}
+
+.info-page>p {
+  color: var(--color-text-soft);
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.unit-switch {
+  display: inline-flex;
+  background: var(--color-tint);
+  border-radius: 99px;
+  padding: 4px;
+  margin-bottom: 16px;
+}
+
+.unit-switch button {
+  padding: 8px 18px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+  transition: .3s;
+}
+
+.unit-switch button.is-active {
+  background: var(--color-ink);
+  color: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+th {
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-weight: 600;
+  text-align: left;
+  padding: 13px 14px;
+  background: var(--color-surface);
+}
+
+td {
+  padding: 13px 14px;
+  border-top: 1px solid var(--color-line);
+}
+
+td:first-child {
+  font-weight: 600;
+}
+
+.note {
+  font-size: 13px;
+  color: var(--color-muted);
+  margin-top: 12px;
+}
+
+.fact-list {
+  display: grid;
+  gap: 12px;
+}
+
+.fact-list li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+}
+
+.fact-list .icon-tile {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.fact-list .icon-tile .icon {
+  width: 22px;
+  height: 22px;
+}
+
+.fact-list strong {
+  display: block;
+  font-size: 15px;
+}
+
+.fact-list li span.fact-text {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.faq-item:first-child {
+  border-top: 1px solid var(--color-line);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: left;
+}
+
+.faq-question:hover {
+  color: var(--color-accent);
+}
+
+.faq-plus {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--color-line);
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition: .4s var(--ease);
+}
+
+.faq-plus .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.faq-item.is-open .faq-plus {
+  transform: rotate(45deg);
+  background: var(--color-ink);
+  color: #fff;
+  border-color: var(--color-ink);
+}
+
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .45s var(--ease);
+}
+
+.faq-item.is-open .faq-answer {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer>div {
+  overflow: hidden;
+}
+
+.faq-answer p {
+  padding: 0 8px 16px 0;
+  color: var(--color-muted);
+  font-size: 14.5px;
+}
+
+.toast {
+  position: fixed;
+  z-index: 120;
+  bottom: 22px;
+  left: 50%;
+  transform: translate(-50%,calc(100% + 40px));
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-ink);
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 99px;
+  font-size: 14px;
+  transition: transform .55s var(--ease),opacity .3s;
+  max-width: calc(100vw - 32px);
+}
+
+.toast.is-visible {
+  transform: translate(-50%,0);
+  opacity: 1;
+}
+
+.toast .icon {
+  color: var(--color-accent-light);
+}
+
+.floating-buttons {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 40;
+  display: grid;
+  gap: 10px;
+}
+
+.floating-buttons a,
+
+.floating-buttons button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  border: 2px solid #fff;
+  transition: .35s var(--ease);
+}
+
+.floating-buttons a:hover,
+
+.floating-buttons button:hover {
+  background: var(--color-accent);
+  transform: scale(1.1) rotate(-8deg);
+}
+
+/* Search, account and product drawers (added after the cart / info drawers) */
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 22px 14px;
+  padding: 0 16px;
+  height: 52px;
+  border: 1px solid var(--color-line);
+  border-radius: 99px;
+  transition: border-color .3s;
+}
+
+.search-field:focus-within {
+  border-color: var(--color-ink);
+  border-color: var(--color-accent);
+}
+
+.search-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+}
+
+.search-field .icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-muted);
+}
+
+.search-hint {
+  color: var(--color-muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 9px 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: border-color .3s,background .3s,color .3s;
+}
+
+.chip:hover {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: #fff;
+}
+
+.result-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0,1fr) auto;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-line);
+  text-align: left;
+}
+
+.result-row .image-box {
+  width: 64px;
+  border-radius: 12px;
+}
+
+.result-row .image-box::before {
+  font-size: 8px;
+}
+
+.result-row h4 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.result-row p {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.result-row strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.result-row:hover h4 {
+  text-decoration: underline;
+}
+
+.form-field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-field label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-field input {
+  height: 50px;
+  padding: 0 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  font: inherit;
+  font-size: 16px;
+  transition: border-color .3s;
+}
+
+.form-field input:focus {
+  outline: 0;
+  border-color: var(--color-ink);
+  border-color: var(--color-accent);
+}
+
+.form-note {
+  font-size: 13px;
+  color: var(--color-muted);
+  margin-top: 14px;
+}
+
+.pd-main {
+  width: min(100%,340px);
+  margin: 0 auto 14px;
+  border-radius: var(--radius-card);
+}
+
+.pd-thumbs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.pd-thumb {
+  width: 56px;
+  padding: 0;
+  border-radius: 12px;
+  transition: outline-color .25s;
+}
+
+.pd-thumb.is-active {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.pd-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.pd-meta i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--dot);
+  border: 1px solid rgba(0,0,0,.18);
+}
+
+.pd-price {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.pd-price s {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+.pd-price .is-sale {
+  color: var(--color-sale);
+}
+
+.pd-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pd-label button {
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.size-chip {
+  min-width: 52px;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: border-color .25s,background .25s,color .25s;
+}
+
+.size-chip:hover {
+  border-color: var(--color-ink);
+}
+
+.size-chip.is-active {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: #fff;
+}
+
+.btn:disabled {
+  background: #C4C4C4;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.btn:disabled::before {
+  display: none;
+}
+
+.fact-list a {
+  color: inherit;
+}
+
+.fact-list a:hover span.fact-text {
+  color: var(--color-ink);
+  text-decoration: underline;
+}
+
+.cart-item .cart-size {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* ---------- 14. RESPONSIVE RULES ---------- */
+/* On touch screens there is no hover, so show hover-only controls all the time */
+@media (hover:none) {
+  .quick-add {
+    transform: none;
+    left: auto;
+    right: 8px;
+    bottom: 8px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+  }
+  .quick-add span {
+    display: none;
+  }
+  .category-arrow,
+  .look-caption {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Tablet and below: the phone-style header is used */
+@media (max-width:1000px) {
+  .main-nav,
+  .header-actions .desktop-only {
+    display: none;
+  }
+  .menu-toggle {
+    display: grid;
+  }
+  .header-top,
+  .site-header.is-compact .header-top {
+    height: 64px;
+    gap: 8px;
+  }
+  .logo,
+  .site-header.is-compact .logo {
+    font-size: 32px;
+  }
+  .header-search {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+    border-color: transparent;
+  }
+  .header-search span {
+    display: none;
+  }
+  .hero {
+    min-height: min(74vh,620px);
+  }
+  .hero-feature {
+    display: none;
+  }
+  .trust-strip {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .product-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .quick-add {
+    transform: none;
+    left: auto;
+    right: 8px;
+    bottom: 8px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+  }
+  .quick-add span {
+    display: none;
+  }
+  .featured-grid,
+  .newsletter {
+    grid-template-columns: minmax(0,1fr);
+  }
+  .info-cards,
+  .footer-grid,
+  .lookbook-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .bulk-banner {
+    border-radius: 26px;
+  }
+  .look-card:first-child {
+    grid-column: span 2;
+    grid-row: auto;
+    aspect-ratio: 16/11;
+  }
+}
+
+@media (max-width:700px) {
+  .footer-bottom {
+    padding-bottom: 92px;
+  }
+  .announcement-bar {
+    font-size: 13px;
+    letter-spacing: .03em;
+  }
+  .announcement-messages a .icon {
+    display: none;
+  }
+  .category-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .hero {
+    border-radius: 26px;
+  }
+  .info-card {
+    padding: 20px;
+  }
+  .info-card h3 {
+    font-size: 19px;
+  }
+  .trust-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px;
+  }
+  .floating-buttons {
+    right: 12px;
+    bottom: 12px;
+    gap: 8px;
+  }
+  .floating-buttons a,
+  .floating-buttons button {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+@media (max-width:480px) {
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-buttons .btn {
+    width: 100%;
+  }
+  .footer-bottom .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer-grid {
+    grid-template-columns: minmax(0,1fr);
+  }
+  .newsletter .btn {
+    padding: 0 18px;
+  }
+  .section-head {
+    align-items: flex-start;
+  }
+  .tab {
+    padding: 9px 15px;
+  }
+}
+
+/* People who prefer less motion get no animations */
+@media (prefers-reduced-motion:reduce) {
+  *,
+  *::before {
+    animation: none!important;
+    transition: none!important;
+    scroll-behavior: auto!important;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+</style>
+</head>
+<body>
+
+  <!-- =====================================================================
+       HOW THIS FILE IS ORGANISED  (everything is in this one file)
+         1. <style> at the top ........ how the site looks (colours, fonts, spacing)
+         2. HTML below ................ the sections and texts of the page
+         3. First <script> ............ your CONTENT: products, prices, photos, FAQ
+         4. Second <script> ........... the BEHAVIOUR: cart, filters, drawers
+
+       Quick edits
+         Product name / price / photo ... 3rd part, section "4. PRODUCTS"
+         Phone / address / email / social .. 3rd part, section "7. STORE DETAILS"
+         Colours / fonts ................ top of the <style>, section "1. DESIGN TOKENS" (--font-brand, --font-logo)
+       Tip: keep a copy of the file before you change anything.
+       ===================================================================== -->
+
+
+  <a class="skip-link" href="#shop">Skip to content</a>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- ICONS: one <symbol> per icon, all drawn on the same 24px grid with the same 1.75px rounded stroke.
+       Use one anywhere with:  <svg class="icon"><use href="#i-search"/></svg> -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h10"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-shirt" viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-insta" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></symbol>
+    <symbol id="i-fb" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  </defs></svg>
+
+  <div id="top"></div>
+
+  <!-- ===== ANNOUNCEMENT BAR (one message at a time, arrows on both sides) ===== -->
+  <div class="announcement-bar">
+    <div class="container announcement-inner" id="announcementSlider" role="region" aria-roledescription="carousel" aria-label="Announcements">
+      <button class="announcement-arrow" data-direction="-1" aria-label="Previous announcement"><svg class="icon"><use href="#i-chev"/></svg></button>
+      <div class="announcement-messages" id="announcementMessages">
+        <a href="#shop" class="is-active">Free delivery on orders over Tk 3,000 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a href="#" data-info="delivery">Cash on delivery nationwide <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a href="#" data-info="exchange">Easy 7-day size exchange <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a href="#shop">New: The Solid Essentials Edit <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <button class="announcement-arrow" data-direction="1" aria-label="Next announcement"><svg class="icon"><use href="#i-chev"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ===== HEADER: search | logo | account + cart, with the menu links underneath ===== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-top">
+      <div class="header-left">
+        <button class="icon-button menu-toggle" id="menuToggle" aria-label="Open menu" aria-haspopup="dialog"><svg class="icon"><use href="#i-menu"/></svg></button>
+        <button class="header-search" id="searchButton" aria-label="Search" aria-haspopup="dialog"><svg class="icon"><use href="#i-search"/></svg><span>Search</span></button>
+      </div>
+      <a class="logo" href="#top" aria-label="DUOR home">DUOR</a>
+      <div class="header-actions">
+        <button class="icon-button desktop-only" id="accountButton" aria-label="Sign in" aria-haspopup="dialog"><svg class="icon"><use href="#i-user"/></svg></button>
+        <button class="icon-button cart-button" id="cartButton" aria-label="Open cart, 0 items" aria-haspopup="dialog">
+          <svg class="icon"><use href="#i-bag"/></svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+    <nav class="main-nav" aria-label="Primary">
+      <div class="container nav-row">
+        <div class="nav-item"><a class="nav-link" href="#shop" data-category="All">New arrival</a></div>
+        <div class="nav-item"><a class="nav-link" href="#shop" data-category="Shirts">Shirts</a><div class="dropdown"><a href="#shop" data-category="Shirts">Boxy fit shirts</a><a href="#shop" data-category="Shirts">Resort shirts</a><a href="#shop" data-category="Shirts">Summer shirts</a><a href="#shop" data-category="Shirts">Layering shirts</a></div></div>
+        <div class="nav-item"><a class="nav-link" href="#shop" data-category="Tees">T-shirts</a><div class="dropdown"><a href="#shop" data-category="Tees">Round neck</a><a href="#shop" data-category="Tees">Polo</a><a href="#shop" data-category="Tees">Drop shoulder</a><a href="#shop" data-category="Tees">Full sleeve</a></div></div>
+        <div class="nav-item"><a class="nav-link" href="#shop" data-category="Katua">Katua</a><div class="dropdown"><a href="#shop" data-category="Katua">Henley katua</a><a href="#shop" data-category="Katua">V-neck katua</a></div></div>
+        <div class="nav-item"><a class="nav-link" href="#shop" data-category="Hoodies">Hoodies</a><div class="dropdown"><a href="#shop" data-category="Hoodies">Drop hoodies</a><a href="#shop" data-category="Hoodies">Zip hoodies</a></div></div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" style="padding:0">
+      <div class="hero-media image-box image-box-free" id="heroMedia">
+        <video id="heroVideo" autoplay muted loop playsinline preload="metadata" aria-label="DUOR film"
+               poster="https://goodybro.com/cdn/shop/files/preview_images/c9bf692c42b3490f82e6789477d7173b.thumbnail.0000000000_1100x.jpg?v=1786616256">
+          <source src="https://goodybro.com/cdn/shop/videos/c/vp/c9bf692c42b3490f82e6789477d7173b/c9bf692c42b3490f82e6789477d7173b.HD-1080p-7.2Mbps-91501150.mp4?v=0" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="hero-content">
+        <div>
+          <p class="hero-tag"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>The Solid Essentials Edit</p>
+          <h1 class="hero-title"><span style="--order:0">Solid</span> <span style="--order:1">by</span> <span style="--order:2"><em>design.</em></span></h1>
+          <p class="hero-text">Solid-colour essentials, cut for a better fit.</p>
+          <div class="hero-buttons">
+            <a class="btn btn-white" href="#shop">Shop new arrivals <svg class="icon"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn-light" href="#categories">Browse categories</a>
+          </div>
+        </div>
+
+        <!-- Small product card (filled in by main.js) -->
+        <div class="hero-feature" id="heroFeature"></div>
+      </div>
+    </section>
+
+    <!-- ===== TRUST STRIP ===== -->
+    <div class="container">
+      <ul class="trust-strip">
+        <li class="trust-item"><span class="icon-tile"><svg class="icon"><use href="#i-truck"/></svg></span><div><strong>Free delivery</strong><span class="trust-note">Over Tk 3,000</span></div></li>
+        <li class="trust-item"><span class="icon-tile"><svg class="icon"><use href="#i-card"/></svg></span><div><strong>Cash on delivery</strong><span class="trust-note">Nationwide</span></div></li>
+        <li class="trust-item"><span class="icon-tile"><svg class="icon"><use href="#i-swap"/></svg></span><div><strong>Easy exchange</strong><span class="trust-note">Within 7 days</span></div></li>
+        <li class="trust-item"><span class="icon-tile"><svg class="icon"><use href="#i-shield"/></svg></span><div><strong>Quality promise</strong><span class="trust-note">Made to last</span></div></li>
+      </ul>
+    </div>
+
+    <!-- ===== STATEMENT ===== -->
+    <section id="story">
+      <div class="container">
+        <p class="eyebrow reveal">About DUOR</p>
+        <p class="statement-text reveal" style="--delay:1">Solid colours. <em>Honest fabrics.</em> Made to be worn every day.</p>
+        <a class="link-arrow reveal" style="--delay:2" href="#shop">Shop the collection <svg class="icon"><use href="#i-arrow"/></svg></a>
+      </div>
+    </section>
+
+    <!-- ===== CATEGORIES (filled in by main.js from data.js) ===== -->
+    <section id="categories" class="section-soft">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">Collections</span><h2>Shop by <em>category</em></h2></div>
+          <a class="link-arrow" href="#shop">View all <svg class="icon"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="category-grid" id="categoryGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== SHOP (category tabs + colour swatches + products) ===== -->
+    <section id="shop">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">New arrivals</span><h2>Just <em>landed</em></h2></div>
+          <div class="filters">
+            <div class="tabs" id="categoryTabs" role="tablist" aria-label="Filter by category"><span class="tab-indicator" id="tabIndicator"></span></div>
+            <div class="swatches" id="colourSwatches" role="group" aria-label="Filter by colour"></div>
+          </div>
+        </div>
+        <div class="product-grid" id="productGrid" aria-live="polite"></div>
+        <div class="show-more" id="showMoreWrap"><button class="btn btn-light" id="showMoreButton">Show more <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+      </div>
+    </section>
+
+    <!-- ===== FEATURED PRODUCT ===== -->
+    <section class="featured section-soft" id="featured">
+      <div class="container featured-grid">
+        <div class="reveal"><div class="image-box" id="featuredImage"></div></div>
+        <div class="featured-text reveal" style="--delay:2">
+          <span class="eyebrow">Featured</span>
+          <h2>Henley <em>Katua</em></h2>
+          <p>A buttoned collar that works with everything — comfortable, easy and always sharp.</p>
+          <div class="featured-price"><strong>From Tk 999</strong><s>Tk 1,250</s></div>
+          <div class="featured-colours" id="featuredColours" aria-label="Available colours"></div>
+          <a class="btn" href="#shop" data-category="Katua">Shop Katua <svg class="icon"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CUSTOMER CARE (opens the info drawer) ===== -->
+    <section id="care">
+      <div class="container">
+        <div class="section-head reveal"><div><span class="eyebrow">Customer care</span><h2>Good to <em>know</em></h2></div></div>
+        <div class="info-cards">
+          <button class="info-card reveal" data-info="size"><span class="icon-tile"><svg class="icon"><use href="#i-ruler"/></svg></span><h3>Size guide</h3><p>Find your perfect fit.</p><span class="learn-more">Learn more <svg class="icon"><use href="#i-arrow"/></svg></span></button>
+          <button class="info-card reveal" style="--delay:1" data-info="delivery"><span class="icon-tile"><svg class="icon"><use href="#i-truck"/></svg></span><h3>Delivery</h3><p>Fast, with cash on delivery.</p><span class="learn-more">Learn more <svg class="icon"><use href="#i-arrow"/></svg></span></button>
+          <button class="info-card reveal" style="--delay:2" data-info="exchange"><span class="icon-tile"><svg class="icon"><use href="#i-swap"/></svg></span><h3>Exchange</h3><p>7 days, no fuss.</p><span class="learn-more">Learn more <svg class="icon"><use href="#i-arrow"/></svg></span></button>
+          <button class="info-card reveal" style="--delay:3" data-info="care"><span class="icon-tile"><svg class="icon"><use href="#i-drop"/></svg></span><h3>Care</h3><p>Keep colours fresh.</p><span class="learn-more">Learn more <svg class="icon"><use href="#i-arrow"/></svg></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LOOKBOOK ===== -->
+    <section id="lookbook">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">Lookbook</span><h2>Worn <em>daily</em></h2></div>
+          <a class="link-arrow" href="#" data-store-link="instagram">Follow @duor <svg class="icon"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="lookbook-grid" id="lookbookGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== BULK ORDER BANNER ===== -->
+    <div class="bulk-banner reveal" id="bulk">
+      <div class="bulk-inner">
+        <div><span class="eyebrow">Custom orders</span><h2>Bulk &amp; <em>custom</em> orders</h2><p>Brand merchandise, events or family celebrations.</p></div>
+        <a class="btn" href="#" data-info="contact">Order in bulk <svg class="icon"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="newsletter reveal">
+        <div><h2>Join the <em>list.</em></h2><p>New drops and early access, straight to your inbox.</p></div>
+        <form id="newsletterForm">
+          <input type="email" required placeholder="Your email address" aria-label="Email address" autocomplete="email">
+          <button class="btn" type="submit">Subscribe</button>
+        </form>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="logo" href="#top" aria-label="DUOR home">DUOR</a>
+          <p class="footer-about">Solid everyday essentials, made to last.</p>
+          <div class="footer-contact"><svg class="icon"><use href="#i-pin"/></svg><span data-store="address"></span></div>
+          <a class="footer-contact" href="#" data-store-link="phone"><svg class="icon"><use href="#i-phone"/></svg><span><span data-store="phone"></span> · <span data-store="hours"></span></span></a>
+          <a class="footer-contact" href="#" data-store-link="email"><svg class="icon"><use href="#i-mail"/></svg><span data-store="email"></span></a>
+          <div class="social-links">
+            <a href="#" data-store-link="instagram" aria-label="DUOR on Instagram"><svg class="icon"><use href="#i-insta"/></svg></a>
+            <a href="#" data-store-link="facebook" aria-label="DUOR on Facebook"><svg class="icon"><use href="#i-fb"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <nav class="footer-links" aria-label="Shop">
+            <a href="#shop" data-category="All">New arrivals</a>
+            <a href="#shop" data-category="Shirts">Shirts</a>
+            <a href="#shop" data-category="Katua">Katua</a>
+            <a href="#shop" data-category="Hoodies">Hoodies</a>
+            <a href="#shop" data-category="Tees">T-shirts</a>
+          </nav>
+        </div>
+        <div>
+          <h4>Help</h4>
+          <nav class="footer-links" aria-label="Help">
+            <button data-info="size">Size guide</button>
+            <button data-info="delivery">Delivery</button>
+            <button data-info="exchange">Exchange</button>
+            <button data-info="care">Care</button>
+            <button data-info="faq">FAQ</button>
+          </nav>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <nav class="footer-links" aria-label="Company">
+            <a href="#story">Our story</a>
+            <a href="#bulk">Bulk orders</a>
+            <a href="#" data-soon>Careers</a>
+            <button data-info="contact">Contact</button>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-wordmark" aria-hidden="true">DUOR</div>
+
+    <div class="footer-bottom">
+      <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px 24px;flex-wrap:wrap">
+        <span>© 2026 DUOR. All rights reserved.</span>
+        <nav aria-label="Legal"><a href="#" data-soon>Privacy policy</a><a href="#" data-soon>Refund policy</a><a href="#" data-soon>Terms of service</a></nav>
+        <a class="to-top" href="#top">Back to top <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== FLOATING CHAT / CALL BUTTONS ===== -->
+  <div class="floating-buttons">
+    <button data-info="contact" aria-label="Chat with us"><svg class="icon"><use href="#i-chat"/></svg></button>
+    <a href="#" data-store-link="phone" aria-label="Call us"><svg class="icon"><use href="#i-phone"/></svg></a>
+  </div>
+
+  <!-- ===== DRAWERS: cart, phone menu, customer info, search, sign in, product view ===== -->
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Cart">
+    <div class="drawer-header"><h3>Your cart</h3><button class="drawer-close" aria-label="Close cart"><svg class="icon"><use href="#i-close"/></svg></button></div>
+    <div class="drawer-body" id="cartBody"></div>
+    <div class="drawer-footer" id="cartFooter" hidden>
+      <div class="cart-total"><span>Estimated total</span><span id="cartTotal"></span></div>
+      <button class="btn" id="checkoutButton">Check out</button>
+    </div>
+  </aside>
+
+  <aside class="drawer drawer-left" id="menuDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Menu">
+    <div class="drawer-header"><h3>Menu</h3><button class="drawer-close" aria-label="Close menu"><svg class="icon"><use href="#i-close"/></svg></button></div>
+    <div class="drawer-body">
+      <a class="menu-link" style="--order:0" href="#shop">New arrival</a>
+      <a class="menu-link" style="--order:1" href="#shop" data-category="Shirts">Shirts</a>
+      <a class="menu-link" style="--order:2" href="#shop" data-category="Tees">T-shirts</a>
+      <a class="menu-link" style="--order:3" href="#shop" data-category="Katua">Katua</a>
+      <a class="menu-link" style="--order:4" href="#shop" data-category="Hoodies">Hoodies</a>
+      <a class="menu-link" style="--order:5" href="#" data-open="account">Account</a>
+    </div>
+  </aside>
+
+  <aside class="drawer drawer-wide" id="infoDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Customer information">
+    <div class="drawer-header"><h3 id="infoTitle">Size guide</h3><button class="drawer-close" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button></div>
+    <div class="info-tabs" id="infoTabs" role="tablist"></div>
+    <div class="drawer-body" id="infoBody"></div>
+  </aside>
+
+  <aside class="drawer" id="searchDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Search">
+    <div class="drawer-header"><h3>Search</h3><button class="drawer-close" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button></div>
+    <label class="search-field"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="searchInput" type="search" placeholder="Search shirts, katua, hoodies…" autocomplete="off" aria-label="Search products"></label>
+    <div class="drawer-body" id="searchResults" aria-live="polite"></div>
+  </aside>
+
+  <aside class="drawer" id="accountDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Sign in">
+    <div class="drawer-header"><h3>Sign in</h3><button class="drawer-close" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button></div>
+    <div class="drawer-body">
+      <form id="accountForm">
+        <div class="form-field"><label for="accountEmail">Email</label><input id="accountEmail" type="email" required autocomplete="email" placeholder="you@example.com"></div>
+        <div class="form-field"><label for="accountPassword">Password</label><input id="accountPassword" type="password" required autocomplete="current-password" placeholder="Your password"></div>
+        <button class="btn" type="submit">Sign in</button>
+        <p class="form-note">New to DUOR? You can create an account at checkout.</p>
+      </form>
+    </div>
+  </aside>
+
+  <aside class="drawer" id="productDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Product">
+    <div class="drawer-header"><h3 id="productTitle">Product</h3><button class="drawer-close" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button></div>
+    <div class="drawer-body" id="productBody"></div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><svg class="icon"><use href="#i-check"/></svg><span id="toastText"></span></div>
+
+  <!-- Your content lives in data.js. The behaviour lives in main.js. -->
+  <!-- 3. CONTENT: products, prices, photos, FAQ -->
+  <script>
+/* =====================================================================
+   DUOR — data.js
+   ALL the content of the shop lives in this file: products, prices,
+   categories, photos and help texts. To change something on the website,
+   change it here. You do not need to touch main.js.
+
+   Tips for beginners
+   - Text goes inside 'single quotes'.
+   - Every line ends with a comma.
+   - Prices are plain numbers (1550, not '1,550').
+   - Set oldPrice to 0 when a product is not on sale.
+   ===================================================================== */
+
+
+// ---------- 1. GENERAL SETTINGS ----------
+const CURRENCY = 'Tk';
+
+
+// ---------- 2. WHERE THE PHOTOS ARE ----------
+// For now the photos come from the GoodyBro website. When DUOR has its own
+// photos, upload them and change these two folders (or use local names
+// such as 'images/shirt-blue.jpg' in the lists below).
+const PRODUCT_IMAGE_FOLDER = 'https://goodybro.com/cdn/shop/files/';
+const COLLECTION_IMAGE_FOLDER = 'https://goodybro.com/cdn/shop/collections/';
+
+// These two small functions build the full photo address.
+function productImage(fileName, width) {
+  // Shopify-style links accept a "&width=" size option. Your own files do not need it.
+  return PRODUCT_IMAGE_FOLDER + fileName + (fileName.includes('?') ? '&width=' + width : '');
+}
+function categoryImage(fileName, width) {
+  return COLLECTION_IMAGE_FOLDER + fileName + (fileName.includes('?') ? '&width=' + width : '');
+}
+
+
+// ---------- 3. CATEGORY CARDS ("Shop by category") ----------
+// name: title shown on the card
+// filter: which shop tab opens when the card is clicked ('All' shows everything)
+const CATEGORIES = [
+  { name: 'Boxy Fit Shirts', filter: 'Shirts', image: 'IMG_4919_1.jpg?v=1791469878' },
+  { name: 'Henley Katua', filter: 'Katua', image: 'Henley_Katua_1_cb52481a-de64-4196-95ba-f079fe622768.png?v=1778525246' },
+  { name: 'Classic Henley Tee', filter: 'Tees', image: 'Classic_Henley_Tee_Category_Image_2_1.png?v=1791106149' },
+  { name: 'Summer Edit', filter: 'Tees', image: 'Summer.png?v=1778525190' },
+  { name: 'OOTD Shirts', filter: 'Shirts', image: 'Couple.png?v=1787217972' },
+  { name: 'Butter Smooth Tees', filter: 'Tees', image: '9.png?v=1787223426' },
+  { name: 'Bottoms', filter: 'All', image: 'All_Pant_Categories.png?v=1778525792' },
+  { name: 'Round Neck Tees', filter: 'Tees', image: 'Round_Neck_3.png?v=1778525571' },
+];
+
+
+// ---------- 4. PRODUCTS ----------
+// colourFamily is used by the colour swatches: Neutral, Dark, Blue, Green or Pink.
+// image = main photo, hoverImage = second photo shown when the mouse is over the card.
+const PRODUCT_CATEGORIES = ['Shirts', 'Katua', 'Hoodies', 'Tees'];
+
+const PRODUCTS = [
+  // ----- SHIRTS -----
+  { id: 'shirts-signature-blue', category: 'Shirts', name: 'Boxy Fit Shirt', colour: 'Signature Blue', colourFamily: 'Blue', hex: '#5E7FB8', price: 1550, oldPrice: 0,
+    image: '1X1_1_b2e9498f-f10a-4ba0-99cb-4cf4180319d7.jpg?v=1791468443',
+    hoverImage: '1x1.jpg?v=1791468443' },
+  { id: 'shirts-baby-pink', category: 'Shirts', name: 'Boxy Fit Shirt', colour: 'Baby Pink', colourFamily: 'Pink', hex: '#F2C6D0', price: 1250, oldPrice: 0,
+    image: '8D076E29-C58A-47AD-9314-80D2EAD7D695_result_result.png?v=1791469718',
+    hoverImage: 'DSC09218_result_result.jpg?v=1791469719' },
+  { id: 'shirts-powder-blue', category: 'Shirts', name: 'Boxy Fit Shirt', colour: 'Powder Blue', colourFamily: 'Blue', hex: '#B7D0EA', price: 1250, oldPrice: 0,
+    image: '1x1_result_result_9789d34e-62a2-4f3f-88ab-d1b9eea933cf.jpg?v=1791469667',
+    hoverImage: '1x1_1__result_result_2d96ecaa-4394-427e-b079-f18d147e214c.jpg?v=1791469668' },
+  { id: 'shirts-classic-taupe', category: 'Shirts', name: 'Boxy Fit Shirt', colour: 'Classic Taupe', colourFamily: 'Neutral', hex: '#A89888', price: 1250, oldPrice: 0,
+    image: 'DSC09260_result_result.jpg?v=1791469619',
+    hoverImage: 'DSC09271_result_result.jpg?v=1791469619' },
+  { id: 'shirts-classic-white', category: 'Shirts', name: 'Boxy Fit Shirt', colour: 'Classic White', colourFamily: 'Neutral', hex: '#F1EEE8', price: 1450, oldPrice: 0,
+    image: 'DSC09279_result_result.jpg?v=1791469540',
+    hoverImage: '3x4_1__result_result.jpg?v=1791469541' },
+  { id: 'shirts-classic-black', category: 'Shirts', name: 'Boxy Fit Shirt', colour: 'Classic Black', colourFamily: 'Dark', hex: '#1E1E1E', price: 1450, oldPrice: 0,
+    image: '1X1_result_result.jpg?v=1791469459',
+    hoverImage: '1X1_1__result_result.jpg?v=1791469459' },
+  // ----- KATUA -----
+  { id: 'katua-lavender-blush', category: 'Katua', name: 'Henley Katua', colour: 'Lavender Blush', colourFamily: 'Pink', hex: '#E6D9EC', price: 999, oldPrice: 1250,
+    image: 'DSC09405.png?v=1791206321',
+    hoverImage: 'Stone_Front_10590ac1-a9e5-4c01-a920-8079efa8d2ab.png?v=1788690296' },
+  { id: 'katua-dark-olive', category: 'Katua', name: 'Henley Katua', colour: 'Dark Olive', colourFamily: 'Green', hex: '#4F5B34', price: 999, oldPrice: 1250,
+    image: 'DSC09409.png?v=1791206567',
+    hoverImage: 'Pickle_Front.png?v=1788859267' },
+  { id: 'katua-mocha', category: 'Katua', name: 'Henley Katua', colour: 'Mocha', colourFamily: 'Neutral', hex: '#7A5C4A', price: 999, oldPrice: 1250,
+    image: 'DSC09395.png?v=1791206642',
+    hoverImage: 'Close_45645863-42a9-41ad-914c-24434b5c5629.jpg?v=1784012082' },
+  { id: 'katua-lime-green', category: 'Katua', name: 'Henley Katua', colour: 'Lime Green', colourFamily: 'Green', hex: '#B7D13B', price: 999, oldPrice: 1250,
+    image: 'DSC05932.jpg?v=1778163982',
+    hoverImage: 'DSC05938.jpg?v=1778163981' },
+  { id: 'katua-sage', category: 'Katua', name: 'Henley Katua', colour: 'Sage', colourFamily: 'Green', hex: '#A9B8A0', price: 999, oldPrice: 1250,
+    image: 'Front.png?v=1771919445',
+    hoverImage: 'Second.png?v=1771919445' },
+  { id: 'katua-pastel-pink', category: 'Katua', name: 'Henley Katua', colour: 'Pastel Pink', colourFamily: 'Pink', hex: '#F2C6D0', price: 999, oldPrice: 1250,
+    image: 'DSC04520.jpg?v=1784031752',
+    hoverImage: 'Front_2.png?v=1771921135' },
+  // ----- HOODIES -----
+  { id: 'hoodies-light-lavender', category: 'Hoodies', name: 'Drop Hoodie', colour: 'Light Lavender', colourFamily: 'Pink', hex: '#CFC3E6', price: 650, oldPrice: 900,
+    image: 'DSC01106.png?v=1766041786',
+    hoverImage: 'DSC01120.png?v=1766041786' },
+  { id: 'hoodies-berry', category: 'Hoodies', name: 'Drop Hoodie', colour: 'Berry', colourFamily: 'Pink', hex: '#7C2D4A', price: 650, oldPrice: 900,
+    image: 'DSC01281.png?v=1766398299',
+    hoverImage: 'DSC01306.png?v=1766398299' },
+  { id: 'hoodies-midnight-black', category: 'Hoodies', name: 'Drop Hoodie', colour: 'Midnight Black', colourFamily: 'Dark', hex: '#1E1E1E', price: 650, oldPrice: 900,
+    image: 'DSC01211_2.png?v=1765284400',
+    hoverImage: 'DSC01227.png?v=1765284400' },
+  { id: 'hoodies-royal-blue', category: 'Hoodies', name: 'Drop Hoodie', colour: 'Royal Blue', colourFamily: 'Blue', hex: '#2B4FB0', price: 650, oldPrice: 900,
+    image: 'Blue_H_1_-_Copy.png?v=1766231389',
+    hoverImage: 'Blue_H_3.png?v=1766231389' },
+  { id: 'hoodies-black', category: 'Hoodies', name: 'Zip Hoodie', colour: 'Black', colourFamily: 'Dark', hex: '#262626', price: 700, oldPrice: 1050,
+    image: 'DSC01324.png?v=1766040565',
+    hoverImage: 'DSC01346.png?v=1766040565' },
+  { id: 'hoodies-cream', category: 'Hoodies', name: 'Zip Hoodie', colour: 'Cream', colourFamily: 'Neutral', hex: '#EFE6D2', price: 700, oldPrice: 1050,
+    image: '4zhc.png?v=1766398493',
+    hoverImage: '3zhc.png?v=1766398493' },
+  // ----- T-SHIRTS -----
+  { id: 'tees-white', category: 'Tees', name: 'Round Neck Half Sleeve', colour: 'White', colourFamily: 'Neutral', hex: '#F1EEE8', price: 350, oldPrice: 0,
+    image: '04.png?v=1767854244',
+    hoverImage: 'White_SM.jpg?v=1767854244' },
+  { id: 'tees-black', category: 'Tees', name: 'Round Neck Half Sleeve', colour: 'Black', colourFamily: 'Dark', hex: '#1E1E1E', price: 350, oldPrice: 0,
+    image: '1_7b6dc657-3be9-4b0a-9249-a99234b569cc.png?v=1695207565',
+    hoverImage: 'DSC00709.jpg?v=1762669750' },
+  { id: 'tees-peach', category: 'Tees', name: 'Round Neck Half Sleeve', colour: 'Peach', colourFamily: 'Pink', hex: '#F4C3A4', price: 350, oldPrice: 0,
+    image: 'Ashiq_Peach_Round_Neck_1.png?v=1785096351',
+    hoverImage: 'RoundNeckDustyRose1.png?v=1776234798' },
+  { id: 'tees-maroon', category: 'Tees', name: 'Round Neck Half Sleeve', colour: 'Maroon', colourFamily: 'Dark', hex: '#6E1F2B', price: 350, oldPrice: 0,
+    image: 'DSC02121_8b7939fb-ac0d-4085-b3fb-abce85cf80f6.png?v=1765019305',
+    hoverImage: 'DSC02119_1ab44a5e-81fe-4e52-9cf9-d5b76ef0af68.png?v=1765019305' },
+  { id: 'tees-forest-green', category: 'Tees', name: 'Round Neck Half Sleeve', colour: 'Forest Green', colourFamily: 'Green', hex: '#2F5A3F', price: 350, oldPrice: 0,
+    image: 'ForestGreen.png?v=1737484699',
+    hoverImage: '19_1_d6a56ef2-9789-4ea9-857b-12b4fc075922.png?v=1776065975' },
+  { id: 'tees-sage', category: 'Tees', name: 'Round Neck Half Sleeve', colour: 'Sage', colourFamily: 'Green', hex: '#A9B8A0', price: 350, oldPrice: 0,
+    image: 'DSC00875.png?v=1737486036',
+    hoverImage: '19_1_d6a56ef2-9789-4ea9-857b-12b4fc075922.png?v=1776065975' },
+];
+
+// The colour dots next to the category tabs
+const COLOUR_FAMILIES = [
+  { name: 'Neutral', hex: '#D9CBB4' },
+  { name: 'Dark',    hex: '#1E1E1E' },
+  { name: 'Blue',    hex: '#5E7FB8' },
+  { name: 'Green',   hex: '#4F6B3C' },
+  { name: 'Pink',    hex: '#E7B6C4' }
+];
+
+
+// ---------- 5. SPECIAL PLACES ON THE HOMEPAGE ----------
+const HERO_PRODUCT_ID = 'katua-dark-olive';           // product shown in the small card on the hero
+const FEATURED_IMAGE = 'Pickle_Front.png?v=1788859267'; // photo in the "Featured" section
+
+// The five photos in the lookbook (the first one is shown big)
+const LOOKBOOK = [
+  { image: 'DSC09405.png?v=1791206321' },
+  { image: 'DSC09279_result_result.jpg?v=1791469540' },
+  { image: 'DSC02883_1.png?v=1766577295' },
+  { image: 'DSC06038.jpg?v=1778250302' },
+  { image: 'DSC00709.jpg?v=1762669750' },
+];
+
+
+// ---------- 6. HELP TEXTS (opened from "Good to know" and the footer) ----------
+// Measurements are in inches. The page converts them to centimetres automatically.
+const SIZE_CHART = [
+  { size: 'S',   chest: 40, length: 27, shoulder: 17.5 },
+  { size: 'M',   chest: 42, length: 28, shoulder: 18 },
+  { size: 'L',   chest: 44, length: 29, shoulder: 18.5 },
+  { size: 'XL',  chest: 46, length: 30, shoulder: 19 },
+  { size: '2XL', chest: 48, length: 31, shoulder: 19.5 },
+  { size: '3XL', chest: 50, length: 32, shoulder: 20 }
+];
+
+const FAQ = [
+  { question: 'How do I choose my size?',        answer: 'Compare our size guide with a shirt that fits you well. If you are between sizes, choose the larger one for a relaxed fit.' },
+  { question: 'How long does delivery take?',    answer: '1–2 working days inside Dhaka and 2–4 working days outside Dhaka.' },
+  { question: 'Which payment methods do you accept?', answer: 'Cash on delivery, mobile banking (bKash, Nagad) and cards.' },
+  { question: 'Can I exchange an item?',         answer: 'Yes, within 7 days — unworn, unwashed and with tags attached.' },
+  { question: 'Do you ship internationally?',    answer: 'Yes. Message or call us with your country and items, and we will confirm the cost and delivery time.' }
+];
+
+
+// ---------- 7. STORE DETAILS ----------
+// Shown in the footer, the contact page and the call button. Fill in your real details.
+// Leave a social link empty ('') until you have it: the button then says "coming soon".
+const STORE = {
+  phone: '09XXX XXXXXX',
+  email: 'hello@duor.com',
+  address: 'Your registered address, Dhaka',
+  hours: '11am – 7pm',
+  instagram: '',      // example: 'https://www.instagram.com/yourpage/'
+  facebook: ''        // example: 'https://www.facebook.com/yourpage'
+};
+
+// Sizes shown in the product view
+const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+
+</script>
+
+  <!-- 4. BEHAVIOUR: cart, filters, drawers, animations -->
+  <script>
+/* =====================================================================
+   DUOR — main.js
+   This file makes the page interactive. It reads the content from data.js.
+   Steps (search for "STEP" to jump):
+     STEP 1  Small helper functions
+     STEP 2  Fixed parts: categories, lookbook, hero card, store details
+     STEP 3  Products: filters, rendering and "show more"
+     STEP 4  Shopping cart
+     STEP 5  Drawers: open, close, keyboard focus
+     STEP 6  Drawer contents: product view, search, account, help pages
+     STEP 7  Announcement bar slider
+     STEP 8  Scroll effects
+     STEP 9  Clicks and start-up
+   ===================================================================== */
+
+
+/* ---------- STEP 1: SMALL HELPERS ---------- */
+
+// Find one element by its id, or many elements by a CSS selector
+function byId(id) { return document.getElementById(id); }
+function all(selector) { return Array.from(document.querySelectorAll(selector)); }
+
+// 1550 -> "Tk 1,550.00"
+function formatPrice(amount) {
+  return CURRENCY + ' ' + amount.toLocaleString('en-US') + '.00';
+}
+
+// Makes text safe to place inside HTML (used for what a visitor types in the search box)
+function escapeHtml(text) {
+  return text.replace(/[&<>"']/g, function (character) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
+  });
+}
+
+// Builds the HTML for one photo inside an image box
+function imageTag(url, altText, loadNow) {
+  const lazy = loadNow ? '' : 'loading="lazy" ';
+  return '<img ' + lazy + 'decoding="async" referrerpolicy="no-referrer" alt="' + altText + '" src="' + url + '">';
+}
+
+// Find a product by its id (for example "katua-dark-olive")
+function findProduct(id) {
+  return PRODUCTS.find(function (product) { return product.id === id; });
+}
+
+// How much cheaper is the product than its old price? (0 when it is not on sale)
+function discountPercent(product) {
+  return product.oldPrice ? Math.round((1 - product.price / product.oldPrice) * 100) : 0;
+}
+
+// Photos fade in when loaded. Until then the box shows a soft tile with the DUOR monogram.
+function markLoadedImages() {
+  all('.image-box img').forEach(function (img) {
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+      img.closest('.image-box').classList.add('is-loaded');
+    }
+  });
+}
+// "load" does not bubble, so we listen in the capture phase to catch every image
+document.addEventListener('load', function (event) {
+  if (event.target.tagName === 'IMG') { markLoadedImages(); }
+}, true);
+
+// The small black message at the bottom of the screen
+let toastTimer;
+function showToast(message) {
+  byId('toastText').textContent = message;
+  byId('toast').classList.add('is-visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { byId('toast').classList.remove('is-visible'); }, 2600);
+}
+
+
+/* ---------- STEP 2: FIXED PARTS OF THE PAGE ---------- */
+
+function renderCategories() {
+  byId('categoryGrid').innerHTML = CATEGORIES.map(function (category, index) {
+    return '<a class="category-card reveal" style="--delay:' + (index % 4) + '" href="#shop" data-category="' + category.filter + '">' +
+             '<div class="image-box">' +
+               imageTag(categoryImage(category.image, 900), category.name) +
+               '<span class="category-arrow"><svg class="icon"><use href="#i-arrow"/></svg></span>' +
+             '</div>' +
+             '<h3>' + category.name + '</h3>' +
+           '</a>';
+  }).join('');
+}
+
+function renderLookbook() {
+  byId('lookbookGrid').innerHTML = LOOKBOOK.map(function (look, index) {
+    // The first photo is shown big, so it is loaded in a larger size
+    return '<a class="image-box look-card reveal" style="--delay:' + index + '" href="#shop" aria-label="Shop the look ' + (index + 1) + '">' +
+             imageTag(productImage(look.image, index === 0 ? 1100 : 700), 'DUOR lookbook ' + (index + 1)) +
+             '<span class="look-caption">Shop the look <svg class="icon"><use href="#i-arrow"/></svg></span>' +
+           '</a>';
+  }).join('');
+}
+
+// The small glass card in the hero shows one product (set in data.js)
+function renderHeroCard() {
+  const product = findProduct(HERO_PRODUCT_ID);
+  byId('heroFeature').innerHTML =
+    '<div class="image-box">' + imageTag(productImage(product.image, 300), product.name, true) + '</div>' +
+    '<div>' +
+      '<small>Bestseller</small>' +
+      '<h3>' + product.name + '</h3>' +
+      '<p>' + product.colour + '</p>' +
+      '<div class="hero-feature-row"><span>' + formatPrice(product.price) + '</span>' +
+        '<button class="round-button" data-view="' + product.id + '" aria-label="Choose a size for ' + product.name + '"><svg class="icon"><use href="#i-plus"/></svg></button>' +
+      '</div>' +
+    '</div>';
+}
+
+// Featured section: photo + colour dots
+function renderFeatured() {
+  byId('featuredImage').innerHTML = imageTag(productImage(FEATURED_IMAGE, 1000), 'Henley Katua');
+  byId('featuredColours').innerHTML = PRODUCTS
+    .filter(function (product) { return product.category === 'Katua'; })
+    .map(function (product) { return '<i style="--dot:' + product.hex + '" title="' + product.colour + '"></i>'; })
+    .join('');
+}
+
+// Turns a contact detail from data.js into a link. Returns '' while it is still a placeholder.
+function storeLink(kind) {
+  if (kind === 'phone') {
+    const digits = STORE.phone.replace(/[^\d+]/g, '');
+    return digits.length >= 8 ? 'tel:' + digits : '';
+  }
+  if (kind === 'email') { return STORE.email ? 'mailto:' + STORE.email : ''; }
+  return STORE[kind] || '';            // instagram, facebook
+}
+
+// Writes the phone number, address, e-mail and social links from data.js into the page
+function fillStoreDetails() {
+  all('[data-store]').forEach(function (element) { element.textContent = STORE[element.dataset.store]; });
+  all('[data-store-link]').forEach(function (element) {
+    const href = storeLink(element.dataset.storeLink);
+    if (href) {
+      element.href = href;
+      if (href.indexOf('http') === 0) { element.target = '_blank'; element.rel = 'noopener'; }
+    } else {
+      element.setAttribute('data-soon', '');       // no link yet: clicking shows a friendly message
+    }
+  });
+}
+
+
+/* ---------- STEP 3: PRODUCTS (filters, rendering, show more) ---------- */
+
+const PRODUCTS_PER_PAGE = 8;
+
+// The current filter settings. Changing these and calling renderProducts() updates the page.
+const filters = {
+  category: 'All',
+  colour: 'All',
+  visibleCount: PRODUCTS_PER_PAGE
+};
+
+function getFilteredProducts() {
+  return PRODUCTS.filter(function (product) {
+    const categoryMatches = filters.category === 'All' || product.category === filters.category;
+    const colourMatches = filters.colour === 'All' || product.colourFamily === filters.colour;
+    return categoryMatches && colourMatches;
+  });
+}
+
+const wishlist = new Set();   // ids of products the visitor has hearted
+
+function productCardHtml(product) {
+  const discount = discountPercent(product);
+  const badges = discount ? '<div class="badge-row"><span class="badge">-' + discount + '%</span><span class="badge">Sale</span></div>' : '';
+  const saved = wishlist.has(product.id);
+  const oldPrice = discount ? '<s>' + formatPrice(product.oldPrice) + '</s>' : '';
+
+  return '<article class="product-card">' +
+    '<div class="image-box">' +
+      '<button class="product-link" data-view="' + product.id + '" aria-label="View ' + product.name + ' ' + product.colour + '"></button>' +
+      imageTag(productImage(product.image, 640), product.name + ' in ' + product.colour) +
+      imageTag(productImage(product.hoverImage, 640), '') +
+      badges +
+      '<button class="wish-button ' + (saved ? 'is-saved' : '') + '" data-wish="' + product.id + '" aria-pressed="' + saved + '" aria-label="Save ' + product.name + ' ' + product.colour + '"><svg class="icon"><use href="#i-heart"/></svg></button>' +
+      '<button class="quick-add" data-view="' + product.id + '" aria-label="Choose a size for ' + product.name + ' ' + product.colour + '"><svg class="icon"><use href="#i-plus"/></svg><span>Choose size</span></button>' +
+    '</div>' +
+    '<div class="product-info">' +
+      '<h3>' + product.name + '</h3>' +
+      '<p class="product-colour"><i style="--dot:' + product.hex + '"></i>' + product.colour + '</p>' +
+      '<div class="price"><strong class="' + (discount ? 'is-sale' : '') + '">' + formatPrice(product.price) + '</strong>' + oldPrice + '</div>' +
+    '</div>' +
+  '</article>';
+}
+
+function renderProducts() {
+  const matching = getFilteredProducts();
+  const shown = matching.slice(0, filters.visibleCount);
+
+  byId('productGrid').innerHTML = shown.length
+    ? shown.map(productCardHtml).join('')
+    : '<p class="empty-message">No products in this colour yet.</p>';
+
+  // Hide the "Show more" button when everything is already visible
+  byId('showMoreWrap').hidden = filters.visibleCount >= matching.length;
+  markLoadedImages();
+}
+
+// --- Category tabs (All / Shirts / Katua / Hoodies / Tees) ---
+function renderTabs() {
+  const names = ['All'].concat(PRODUCT_CATEGORIES);
+  byId('categoryTabs').insertAdjacentHTML('beforeend', names.map(function (name) {
+    const active = name === filters.category;
+    return '<button class="tab ' + (active ? 'is-active' : '') + '" role="tab" data-tab="' + name + '" aria-selected="' + active + '" tabindex="' + (active ? 0 : -1) + '">' + name + '</button>';
+  }).join(''));
+}
+
+// Moves the dark pill behind the active tab
+function moveTabIndicator() {
+  const activeTab = byId('categoryTabs').querySelector('.tab.is-active');
+  const indicator = byId('tabIndicator');
+  if (!activeTab) { return; }
+  indicator.style.width = activeTab.offsetWidth + 'px';
+  indicator.style.height = activeTab.offsetHeight + 'px';
+  indicator.style.transform = 'translate(' + activeTab.offsetLeft + 'px,' + activeTab.offsetTop + 'px)';
+}
+
+function setCategory(category) {
+  filters.category = category;
+  filters.visibleCount = PRODUCTS_PER_PAGE;
+  all('.tab').forEach(function (tab) {
+    const active = tab.dataset.tab === category;
+    tab.classList.toggle('is-active', active);
+    tab.setAttribute('aria-selected', active);
+    tab.tabIndex = active ? 0 : -1;
+  });
+  moveTabIndicator();
+  renderProducts();
+}
+
+// --- Colour swatches ---
+function renderSwatches() {
+  const allButton = '<button class="swatch swatch-all is-active" data-colour="All" aria-label="All colours" aria-pressed="true" title="All colours"></button>';
+  byId('colourSwatches').innerHTML = allButton + COLOUR_FAMILIES.map(function (family) {
+    return '<button class="swatch" style="--swatch:' + family.hex + '" data-colour="' + family.name + '" aria-label="' + family.name + '" aria-pressed="false" title="' + family.name + '"></button>';
+  }).join('');
+}
+
+function setColour(colour) {
+  filters.colour = colour;
+  filters.visibleCount = PRODUCTS_PER_PAGE;
+  all('.swatch').forEach(function (swatch) {
+    const active = swatch.dataset.colour === colour;
+    swatch.classList.toggle('is-active', active);
+    swatch.setAttribute('aria-pressed', active);
+  });
+  renderProducts();
+}
+
+function toggleWishlist(productId, button) {
+  const nowSaved = !wishlist.has(productId);
+  if (nowSaved) { wishlist.add(productId); } else { wishlist.delete(productId); }
+  button.classList.toggle('is-saved', nowSaved);
+  button.setAttribute('aria-pressed', nowSaved);
+  if (nowSaved) { showToast('Saved to your wishlist'); }
+}
+
+
+/* ---------- STEP 4: SHOPPING CART ---------- */
+
+// Each line in the cart is one product in one size. Key example: "katua-dark-olive|M"
+const cart = {};
+
+function addToCart(productId, size) {
+  const key = productId + '|' + size;
+  cart[key] = (cart[key] || 0) + 1;
+  renderCart();
+  const product = findProduct(productId);
+  showToast(product.name + ' · ' + product.colour + ' (' + size + ') added to cart');
+}
+
+function changeQuantity(key, change) {
+  cart[key] += change;
+  if (cart[key] < 1) { delete cart[key]; }
+  renderCart();
+}
+
+function renderCart() {
+  const keys = Object.keys(cart);
+  let itemCount = 0;
+  let total = 0;
+  keys.forEach(function (key) {
+    itemCount += cart[key];
+    total += findProduct(key.split('|')[0]).price * cart[key];
+  });
+
+  // Number on the cart button
+  const countBadge = byId('cartCount');
+  countBadge.textContent = itemCount;
+  countBadge.classList.toggle('has-items', itemCount > 0);
+  byId('cartButton').setAttribute('aria-label', 'Open cart, ' + itemCount + (itemCount === 1 ? ' item' : ' items'));
+
+  // Items inside the cart drawer
+  if (keys.length === 0) {
+    byId('cartBody').innerHTML = '<div class="cart-empty"><p>Your cart is empty</p></div><a class="btn" href="#shop" data-close-drawers>Continue shopping</a>';
+  } else {
+    byId('cartBody').innerHTML = keys.map(function (key) {
+      const parts = key.split('|');
+      const product = findProduct(parts[0]);
+      return '<div class="cart-item">' +
+        '<div class="image-box">' + imageTag(productImage(product.image, 200), '', true) + '</div>' +
+        '<div><h4>' + product.name + '</h4><p>' + product.colour + ' · Size <span class="cart-size">' + parts[1] + '</span></p>' +
+          '<div class="quantity">' +
+            '<button data-quantity="' + key + '" data-change="-1" aria-label="Decrease quantity">−</button>' +
+            '<span>' + cart[key] + '</span>' +
+            '<button data-quantity="' + key + '" data-change="1" aria-label="Increase quantity">+</button>' +
+          '</div></div>' +
+        '<strong>' + formatPrice(product.price * cart[key]) + '</strong>' +
+      '</div>';
+    }).join('');
+  }
+  byId('cartFooter').hidden = keys.length === 0;
+  byId('cartTotal').textContent = formatPrice(total);
+  markLoadedImages();
+}
+
+
+/* ---------- STEP 5: DRAWERS (open, close, keyboard focus) ---------- */
+
+const overlay = byId('overlay');
+const cartDrawer = byId('cartDrawer');
+const menuDrawer = byId('menuDrawer');
+const infoDrawer = byId('infoDrawer');
+const searchDrawer = byId('searchDrawer');
+const accountDrawer = byId('accountDrawer');
+const productDrawer = byId('productDrawer');
+let lastFocusedElement = null;      // so the focus can go back to the button that opened the drawer
+
+function openDrawer(drawer) {
+  if (!document.querySelector('.drawer.is-open')) { lastFocusedElement = document.activeElement; }
+  all('.drawer.is-open').forEach(function (other) { other.classList.remove('is-open'); other.setAttribute('aria-hidden', 'true'); });
+  drawer.classList.add('is-open');
+  drawer.setAttribute('aria-hidden', 'false');
+  overlay.classList.add('is-open');
+  // Move the keyboard focus into the drawer (the search drawer focuses its text box)
+  const firstControl = drawer.querySelector('input, .drawer-close');
+  setTimeout(function () { if (firstControl) { firstControl.focus(); } }, 80);
+}
+
+function closeDrawers() {
+  const wasOpen = document.querySelector('.drawer.is-open');
+  all('.drawer.is-open').forEach(function (drawer) { drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); });
+  overlay.classList.remove('is-open');
+  if (wasOpen && lastFocusedElement) { lastFocusedElement.focus(); lastFocusedElement = null; }
+}
+
+// Keyboard: Escape closes a drawer, Tab stays inside the open drawer
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Escape') { closeDrawers(); return; }
+  if (event.key !== 'Tab') { return; }
+  const drawer = document.querySelector('.drawer.is-open');
+  if (!drawer) { return; }
+  const controls = Array.from(drawer.querySelectorAll('a[href], button:not([disabled]), input')).filter(function (element) { return element.offsetParent !== null; });
+  if (controls.length === 0) { return; }
+  const first = controls[0];
+  const last = controls[controls.length - 1];
+  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+});
+
+
+/* ---------- STEP 6: DRAWER CONTENTS ---------- */
+
+// --- 6a. Product view: big photo, size buttons, "Add to cart" ---
+let currentProduct = null;
+let selectedSize = '';
+let currentPhoto = 0;
+
+function openProduct(productId) {
+  currentProduct = findProduct(productId);
+  selectedSize = '';
+  currentPhoto = 0;
+  renderProductDrawer();
+  openDrawer(productDrawer);
+}
+
+function renderProductDrawer() {
+  const product = currentProduct;
+  const discount = discountPercent(product);
+  byId('productTitle').textContent = product.name;
+  byId('productBody').innerHTML =
+    '<div class="image-box pd-main" id="productPhoto"></div>' +
+    '<div class="pd-thumbs" id="productThumbs"></div>' +
+    '<p class="pd-meta"><i style="--dot:' + product.hex + '"></i>' + product.colour + '</p>' +
+    '<p class="pd-price"><span class="' + (discount ? 'is-sale' : '') + '">' + formatPrice(product.price) + '</span>' + (discount ? '<s>' + formatPrice(product.oldPrice) + '</s>' : '') + '</p>' +
+    '<div class="pd-label"><span>Size</span><button data-info="size">Size guide</button></div>' +
+    '<div class="size-options" id="sizeOptions" role="group" aria-label="Choose a size"></div>' +
+    '<button class="btn" id="productAddButton" disabled>Select a size</button>';
+  updateProductPhotos();
+  updateSizeOptions();
+}
+
+function updateProductPhotos() {
+  const photos = [currentProduct.image, currentProduct.hoverImage];
+  byId('productPhoto').innerHTML = imageTag(productImage(photos[currentPhoto], 900), currentProduct.name + ' in ' + currentProduct.colour, true);
+  byId('productPhoto').classList.remove('is-loaded');
+  byId('productThumbs').innerHTML = photos.map(function (photo, index) {
+    return '<button class="image-box pd-thumb ' + (index === currentPhoto ? 'is-active' : '') + '" data-photo="' + index + '" aria-label="Show photo ' + (index + 1) + '">' + imageTag(productImage(photo, 200), '', true) + '</button>';
+  }).join('');
+  markLoadedImages();
+}
+
+function updateSizeOptions() {
+  byId('sizeOptions').innerHTML = SIZES.map(function (size) {
+    const active = size === selectedSize;
+    return '<button class="size-chip ' + (active ? 'is-active' : '') + '" data-size="' + size + '" aria-pressed="' + active + '">' + size + '</button>';
+  }).join('');
+  const addButton = byId('productAddButton');
+  addButton.disabled = !selectedSize;
+  addButton.textContent = selectedSize ? 'Add to cart · Size ' + selectedSize : 'Select a size';
+}
+
+// --- 6b. Search: shows matching products while typing ---
+function renderSearchResults(query) {
+  const text = query.trim().toLowerCase();
+  const box = byId('searchResults');
+  if (!text) {
+    box.innerHTML = '<p class="search-hint">Popular searches</p><div class="chip-row">' +
+      ['Shirts', 'Katua', 'Hoodies', 'Tees', 'Black', 'Green'].map(function (word) {
+        return '<button class="chip" data-search="' + word + '">' + word + '</button>';
+      }).join('') + '</div>';
+    return;
+  }
+  const results = PRODUCTS.filter(function (product) {
+    return (product.name + ' ' + product.colour + ' ' + product.category + ' ' + product.colourFamily).toLowerCase().indexOf(text) !== -1;
+  }).slice(0, 10);
+
+  if (results.length === 0) {
+    box.innerHTML = '<p class="search-hint">No products found for “' + escapeHtml(query.trim()) + '”. Try Shirts, Katua or a colour.</p>';
+    return;
+  }
+  box.innerHTML = '<p class="search-hint">' + results.length + (results.length === 1 ? ' result' : ' results') + '</p>' + results.map(function (product) {
+    return '<button class="result-row" data-view="' + product.id + '">' +
+      '<div class="image-box">' + imageTag(productImage(product.image, 200), '', true) + '</div>' +
+      '<div><h4>' + product.name + '</h4><p>' + product.colour + '</p></div>' +
+      '<strong>' + formatPrice(product.price) + '</strong>' +
+    '</button>';
+  }).join('');
+  markLoadedImages();
+}
+
+// --- 6c. Help pages: size guide, delivery, exchange, care, FAQ, contact ---
+let sizeUnit = 'in';        // 'in' or 'cm'
+let currentInfoPage = 'size';
+
+// One row with an icon, a title and a short text (the text becomes a link when "link" is given)
+function factRow(icon, title, text, link) {
+  const content = '<strong>' + title + '</strong><span class="fact-text">' + text + '</span>';
+  return '<li><span class="icon-tile"><svg class="icon"><use href="#i-' + icon + '"/></svg></span><div>' +
+    (link ? '<a href="' + link + '"' + (link.indexOf('http') === 0 ? ' target="_blank" rel="noopener"' : '') + '>' + content + '</a>' : content) +
+  '</div></li>';
+}
+
+function sizeTableHtml() {
+  const rows = SIZE_CHART.map(function (row) {
+    const cells = [row.chest, row.length, row.shoulder].map(function (inches) {
+      return '<td>' + (sizeUnit === 'in' ? inches + ' in' : Math.round(inches * 2.54) + ' cm') + '</td>';
+    }).join('');
+    return '<tr><td>' + row.size + '</td>' + cells + '</tr>';
+  }).join('');
+  return '<div class="info-page">' +
+    '<p>Our cuts are relaxed. Compare with a shirt that fits you well.</p>' +
+    '<div class="unit-switch" role="group" aria-label="Units">' +
+      '<button class="' + (sizeUnit === 'in' ? 'is-active' : '') + '" data-unit="in">Inches</button>' +
+      '<button class="' + (sizeUnit === 'cm' ? 'is-active' : '') + '" data-unit="cm">Centimetres</button>' +
+    '</div>' +
+    '<table><thead><tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '<p class="note">Garment measurements, ±1 cm. Between sizes? Choose the larger size.</p>' +
+  '</div>';
+}
+
+function faqHtml() {
+  return '<div class="info-page">' + FAQ.map(function (item, index) {
+    return '<div class="faq-item ' + (index === 0 ? 'is-open' : '') + '">' +
+      '<button class="faq-question" aria-expanded="' + (index === 0) + '"><span>' + item.question + '</span><span class="faq-plus"><svg class="icon"><use href="#i-plus"/></svg></span></button>' +
+      '<div class="faq-answer"><div><p>' + item.answer + '</p></div></div>' +
+    '</div>';
+  }).join('') + '</div>';
+}
+
+// Each page: [title shown at the top, function that returns its HTML]
+const INFO_PAGES = {
+  size:     ['Size guide', sizeTableHtml],
+  delivery: ['Delivery', function () {
+    return '<div class="info-page"><ul class="fact-list">' +
+      factRow('truck', 'Inside Dhaka', '1–2 working days') +
+      factRow('truck', 'Outside Dhaka', '2–4 working days') +
+      factRow('check', 'Free delivery', 'On orders over Tk 3,000') +
+      factRow('card', 'Payment', 'Cash on delivery, bKash, Nagad or card') +
+      factRow('globe', 'International', 'Message us and we will arrange shipping') +
+    '</ul></div>';
+  }],
+  exchange: ['Exchange', function () {
+    return '<div class="info-page"><ul class="fact-list">' +
+      factRow('swap', '7-day exchange', 'Wrong size? Swap it within 7 days.') +
+      factRow('check', 'Condition', 'Unworn, unwashed, with tags attached.') +
+      factRow('phone', 'How to start', 'Call or message us with your order number.') +
+    '</ul></div>';
+  }],
+  care:     ['Care', function () {
+    return '<div class="info-page"><ul class="fact-list">' +
+      factRow('drop', 'Wash', 'Machine wash cold, inside out.') +
+      factRow('layers', 'Dry', 'Tumble dry low or line dry.') +
+      factRow('shield', 'Avoid', 'No bleach. Iron on a low setting.') +
+    '</ul></div>';
+  }],
+  faq:      ['FAQ', faqHtml],
+  contact:  ['Contact', function () {
+    return '<div class="info-page"><ul class="fact-list">' +
+      factRow('phone', 'Call to order', STORE.phone, storeLink('phone')) +
+      factRow('mail', 'Email', STORE.email, storeLink('email')) +
+      factRow('clock', 'Hours', STORE.hours) +
+      factRow('pin', 'Address', STORE.address) +
+    '</ul></div>';
+  }]
+};
+const INFO_LABELS = { size: 'Size guide', delivery: 'Delivery', exchange: 'Exchange', care: 'Care', faq: 'FAQ', contact: 'Contact' };
+
+function showInfoPage(key) {
+  currentInfoPage = key;
+  byId('infoTitle').textContent = INFO_PAGES[key][0];
+  byId('infoBody').innerHTML = INFO_PAGES[key][1]();
+  byId('infoBody').scrollTop = 0;
+  byId('infoTabs').innerHTML = Object.keys(INFO_PAGES).map(function (name) {
+    const active = name === key;
+    return '<button class="info-tab ' + (active ? 'is-active' : '') + '" role="tab" data-info-tab="' + name + '" aria-selected="' + active + '">' + INFO_LABELS[name] + '</button>';
+  }).join('');
+}
+
+
+/* ---------- STEP 7: ANNOUNCEMENT BAR SLIDER ---------- */
+
+const announcements = all('#announcementMessages a');
+let announcementIndex = 0;
+let announcementPaused = false;
+
+// step = 1 shows the next message, step = -1 shows the previous one
+function showAnnouncement(step) {
+  const leaving = announcements[announcementIndex];
+  announcementIndex = (announcementIndex + step + announcements.length) % announcements.length;
+  const entering = announcements[announcementIndex];
+
+  // 1. Park the new message on the side it should slide in from (without animating)
+  entering.style.transition = 'none';
+  entering.classList.toggle('is-before', step < 0);
+  void entering.offsetWidth;                       // makes the browser apply that position now
+  entering.style.transition = '';
+
+  // 2. Slide the old message out and the new one in
+  leaving.classList.remove('is-active');
+  leaving.classList.toggle('is-before', step > 0);
+  entering.classList.remove('is-before');
+  entering.classList.add('is-active');
+}
+
+
+/* ---------- STEP 8: SCROLL EFFECTS ---------- */
+
+const siteHeader = byId('siteHeader');
+let lastScrollY = 0;
+let scrollQueued = false;
+
+function onScroll() {
+  const y = window.scrollY;
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+
+  // Thin progress bar at the top of the screen
+  byId('scrollProgress').style.transform = 'scaleX(' + (scrollable > 0 ? Math.min(1, y / scrollable) : 0) + ')';
+
+  // The header gets a little shorter once the page has scrolled
+  siteHeader.classList.toggle('is-compact', y > 60);
+
+  // It hides when scrolling down and returns when scrolling up
+  if (y > lastScrollY + 6 && y > 320) { siteHeader.classList.add('is-hidden'); }
+  else if (y < lastScrollY - 6 || y < 320) { siteHeader.classList.remove('is-hidden'); }
+  lastScrollY = y;
+  scrollQueued = false;
+}
+
+// Elements with class "reveal" fade up the first time they scroll into view
+function setupRevealOnScroll() {
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  all('.reveal').forEach(function (element) { observer.observe(element); });
+}
+
+
+/* ---------- STEP 9: CLICKS AND START-UP ---------- */
+
+function setupClicks() {
+  // One click listener for the whole page: it checks what was clicked
+  document.addEventListener('click', function (event) {
+    const target = event.target;
+
+    // Links that go nowhere yet ("#") should not jump to the top of the page
+    if (target.closest('a[href="#"]')) { event.preventDefault(); }
+
+    // Pages that are not built yet
+    const soon = target.closest('[data-soon]');
+    if (soon) { event.preventDefault(); showToast('This is coming soon.'); return; }
+
+    // A link that opens a drawer, for example data-open="account"
+    const drawerOpener = target.closest('[data-open]');
+    if (drawerOpener) { openDrawer(drawerOpener.dataset.open === 'account' ? accountDrawer : searchDrawer); return; }
+
+    const viewButton = target.closest('[data-view]');
+    if (viewButton) { openProduct(viewButton.dataset.view); return; }
+
+    const sizeButton = target.closest('[data-size]');
+    if (sizeButton) { selectedSize = sizeButton.dataset.size; updateSizeOptions(); return; }
+
+    const photoButton = target.closest('[data-photo]');
+    if (photoButton) { currentPhoto = Number(photoButton.dataset.photo); updateProductPhotos(); return; }
+
+    if (target.closest('#productAddButton')) {
+      if (!selectedSize) { return; }
+      addToCart(currentProduct.id, selectedSize);
+      renderCart();
+      openDrawer(cartDrawer);
+      return;
+    }
+
+    const quantityButton = target.closest('[data-quantity]');
+    if (quantityButton) { changeQuantity(quantityButton.dataset.quantity, Number(quantityButton.dataset.change)); return; }
+
+    const wishButton = target.closest('[data-wish]');
+    if (wishButton) { toggleWishlist(wishButton.dataset.wish, wishButton); return; }
+
+    const tab = target.closest('.tab');
+    if (tab) { setCategory(tab.dataset.tab); return; }
+
+    const swatch = target.closest('.swatch');
+    if (swatch) { setColour(swatch.dataset.colour); return; }
+
+    const searchChip = target.closest('[data-search]');
+    if (searchChip) { byId('searchInput').value = searchChip.dataset.search; renderSearchResults(searchChip.dataset.search); byId('searchInput').focus(); return; }
+
+    // Any link with data-category switches the shop to that category
+    const categoryLink = target.closest('[data-category]');
+    if (categoryLink) { setCategory(categoryLink.dataset.category); closeDrawers(); }
+
+    const infoOpener = target.closest('[data-info]');
+    if (infoOpener) { showInfoPage(infoOpener.dataset.info); openDrawer(infoDrawer); return; }
+
+    const infoTab = target.closest('[data-info-tab]');
+    if (infoTab) { showInfoPage(infoTab.dataset.infoTab); return; }
+
+    const unitButton = target.closest('[data-unit]');
+    if (unitButton) { sizeUnit = unitButton.dataset.unit; showInfoPage(currentInfoPage); return; }
+
+    const question = target.closest('.faq-question');
+    if (question) {
+      const item = question.parentElement;
+      const open = !item.classList.contains('is-open');
+      item.classList.toggle('is-open', open);
+      question.setAttribute('aria-expanded', open);
+      return;
+    }
+
+    const arrow = target.closest('.announcement-arrow');
+    if (arrow) { showAnnouncement(Number(arrow.dataset.direction)); return; }
+
+    if (target.closest('[data-close-drawers]') || target.closest('#menuDrawer a')) { closeDrawers(); }
+  });
+
+  // Header buttons
+  byId('cartButton').addEventListener('click', function () { openDrawer(cartDrawer); });
+  byId('searchButton').addEventListener('click', function () { renderSearchResults(byId('searchInput').value); openDrawer(searchDrawer); });
+  byId('accountButton').addEventListener('click', function () { openDrawer(accountDrawer); });
+  byId('menuToggle').addEventListener('click', function () { openDrawer(menuDrawer); });
+
+  // Every drawer has a close button, and the dark background also closes them
+  all('.drawer-close').forEach(function (button) { button.addEventListener('click', closeDrawers); });
+  overlay.addEventListener('click', closeDrawers);
+
+  byId('showMoreButton').addEventListener('click', function () { filters.visibleCount += PRODUCTS_PER_PAGE; renderProducts(); });
+  byId('checkoutButton').addEventListener('click', function () { showToast('Checkout will connect to your store.'); });
+  byId('searchInput').addEventListener('input', function (event) { renderSearchResults(event.target.value); });
+  byId('accountForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    showToast('Sign in will work once your store is connected.');
+    closeDrawers();
+    event.target.reset();
+  });
+  byId('newsletterForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    showToast('Thanks — you are on the list.');
+    event.target.reset();
+  });
+
+  // Arrow keys move between the category tabs
+  byId('categoryTabs').addEventListener('keydown', function (event) {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') { return; }
+    const tabs = all('.tab');
+    const current = tabs.findIndex(function (tab) { return tab.classList.contains('is-active'); });
+    const next = tabs[(current + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
+    setCategory(next.dataset.tab);
+    next.focus();
+  });
+
+  // The announcement slider changes by itself every 5 seconds, and pauses while it is used
+  const slider = byId('announcementSlider');
+  ['pointerenter', 'focusin'].forEach(function (name) { slider.addEventListener(name, function () { announcementPaused = true; }); });
+  ['pointerleave', 'focusout'].forEach(function (name) { slider.addEventListener(name, function () { announcementPaused = false; }); });
+  setInterval(function () { if (!announcementPaused && !document.hidden) { showAnnouncement(1); } }, 5000);
+
+  window.addEventListener('scroll', function () {
+    if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(onScroll); }
+  }, { passive: true });
+  siteHeader.addEventListener('focusin', function () { siteHeader.classList.remove('is-hidden'); });
+
+  // When the hero video starts, hide the monogram behind it
+  byId('heroVideo').addEventListener('loadeddata', function () { byId('heroMedia').classList.add('is-loaded'); });
+}
+
+function start() {
+  fillStoreDetails();
+  renderCategories();
+  renderLookbook();
+  renderHeroCard();
+  renderFeatured();
+  renderTabs();
+  renderSwatches();
+  renderProducts();
+  renderCart();
+  renderSearchResults('');
+  showInfoPage('size');
+  setupClicks();
+  setupRevealOnScroll();
+  markLoadedImages();
+
+  // The tab indicator needs the final font sizes, so place it again once fonts and images are ready
+  moveTabIndicator();
+  if (document.fonts) { document.fonts.ready.then(moveTabIndicator); }
+  window.addEventListener('resize', moveTabIndicator);
+  window.addEventListener('load', function () { moveTabIndicator(); markLoadedImages(); });
+}
+
+start();
+</script>
+</body>
+</html>
